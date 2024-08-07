@@ -10,6 +10,10 @@ Update line with users you want to generate promo codes for:
 
 ```js
 const users = ['User 1', 'User 2', 'User 3'];
+
+// For example:
+
+const users = ['Aaron', 'Alex'];
 ```
 
 That's it.
