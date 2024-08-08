@@ -16,6 +16,14 @@ const users = ['User 1', 'User 2', 'User 3'];
 const users = ['Aaron', 'Alex'];
 ```
 
+> These are NOT Telegram usernames. These are just random names to visually differentiate when you are generating keys for multiple people.
+
+If you are generating keys only for yourself, you can leave only one user name like this:
+
+```js
+const users = ['Aaron'];
+```
+
 That's it.
 
 ## How Long It Takes
