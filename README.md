@@ -1,3 +1,13 @@
+This script allows generating HamsterKombat coupon code for free using your machine. \
+It doesn't use any proxies, it doesn't make any requests to external APIs. \
+If you are afraid that you IP will get blocked you can simply use VPN. \
+I personally haven't used VPN a single time and my account is not blocked.
+
+## How To Get Node.js
+
+I personally recommend installing it by using [github.com/tj/n](https://github.com/tj/n). \
+This project provides one-line commands to install Node.js on your machine.
+
 ## How To Use
 
 ```shell
