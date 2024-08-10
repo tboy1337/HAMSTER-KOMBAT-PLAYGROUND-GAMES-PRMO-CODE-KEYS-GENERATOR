@@ -39,3 +39,7 @@ That's it.
 ## How Long It Takes
 
 For one token it takes around 2 minutes. For 4 games and 4 tokens - 32 minutes.
+
+## Support Author
+
+If this gist helped you, consider helping me by giving a star to my main project: [github.com/thelang-io/the](https://github.com/thelang-io/the). In advance, thanks a lot!
