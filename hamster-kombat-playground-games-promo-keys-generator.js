@@ -1,6 +1,7 @@
 const DEBUG = false;
 const SERVER_ERROR_COOLDOWN = 300_000;
-const MAX_RETRIES = 6;
+const SERVER_ERROR_RETRIES = 3;
+const MAX_RETRIES = 10;
 
 const games = {
     BIKE: {
@@ -59,7 +60,7 @@ async function delay(ms) {
 
 const users = ['User 1', 'User 2', 'User 3'];
 
-async function fetchApi(path, authTokenOrBody = null, body = null, throwOnServerError = false) {
+async function fetchApi(path, authTokenOrBody = null, body = null, retry = 0) {
     const options = {
         method: 'POST',
         cache: 'no-store',
@@ -91,10 +92,10 @@ async function fetchApi(path, authTokenOrBody = null, body = null, throwOnServer
             debug(data);
         }
 
-        if (!throwOnServerError && res.status >= 500 && res.status < 600) {
+        if (retry < SERVER_ERROR_RETRIES && res.status >= 400) {
             info('Received internal server error, will retry after cooldown period.');
             await delay(SERVER_ERROR_COOLDOWN);
-            return fetchApi(path, authTokenOrBody, body, true);
+            return fetchApi(path, authTokenOrBody, body, retry + 1);
         }
 
         throw new Error(`${res.status} ${res.statusText}`);
