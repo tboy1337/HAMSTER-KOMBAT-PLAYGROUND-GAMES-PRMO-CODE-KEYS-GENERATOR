@@ -3,12 +3,14 @@ It doesn't use any proxies, it doesn't make any requests to external APIs. \
 If you are afraid that you IP will get blocked you can simply use VPN. \
 I personally haven't used VPN a single time and my account is not blocked.
 
-## How To Get Node.js
-
-I personally recommend installing it by using [github.com/tj/n](https://github.com/tj/n). \
-This project provides one-line commands to install Node.js on your machine.
-
 ## How To Use
+
+### With Browser Console
+
+Just copy/paste script below and hit Enter.
+> If you get a warning that you can't paste unknown code type `allow pasting`.
+
+### With Node.js
 
 ```shell
 node hamster-kombat-playground-games-promo-keys-generator.js
