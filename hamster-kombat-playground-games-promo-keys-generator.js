@@ -60,6 +60,12 @@ function uuidv4() {
     );
 }
 
+function timestampDigits19() {
+    const timestamp = Date.now();
+    const digits19 = [...Array(19)].map(() => Math.floor(Math.random() * 10)).join('');
+    return `${timestamp}-${digits19}`;
+}
+
 async function delay(ms) {
     debug(`Waiting ${ms}ms`);
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -115,7 +121,7 @@ async function fetchApi(path, authTokenOrBody = null, body = null, retry = 0) {
 
 async function getPromoCode(gameKey) {
     const gameConfig = games[gameKey];
-    const clientId = uuidv4();
+    const clientId = gameKey === 'BIKE' ? timestampDigits19() : uuidv4();
 
     const loginClientData = await fetchApi('/promo/login-client', {
         appToken: gameConfig.appToken,
