@@ -1,4 +1,4 @@
-# Hamster Kombat Playground Promo Code Keys Generator
+# HamsterKombat Playground Promo Code Keys Generator
 
 This script is way more advanced than other scripts out there
 
