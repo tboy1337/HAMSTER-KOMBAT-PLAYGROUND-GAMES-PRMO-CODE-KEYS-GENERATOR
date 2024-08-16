@@ -40,7 +40,7 @@ That's it.
 
 ## How Long It Takes
 
-For one token it takes around 2 minutes. For 4 games and 4 tokens - 32 minutes.
+For one token on average it takes 2 minutes 20 seconds. For 6 games and 4 keys - 56 minutes.
 
 ## Support Author
 
