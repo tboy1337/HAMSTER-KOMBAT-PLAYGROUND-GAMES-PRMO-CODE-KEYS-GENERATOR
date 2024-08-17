@@ -60,6 +60,10 @@ For one token on average it takes 2 minutes 20 seconds. For 6 games and 4 keys -
 I run game on physical device, I actually play the game (so you don't need to). \
 While doing this I intercept and inspect requests with Wireshark looking for clues.
 
+## Node.js Version
+
+I personally test on Node.js v20, though I'm pretty sure it will work on v18 too.
+
 ## Support Author
 
 If this gist helped you, consider helping me by giving a star to my main project: \
