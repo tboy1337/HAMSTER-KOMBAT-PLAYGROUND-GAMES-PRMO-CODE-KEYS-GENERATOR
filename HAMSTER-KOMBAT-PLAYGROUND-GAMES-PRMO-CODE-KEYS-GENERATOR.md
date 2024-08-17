@@ -3,7 +3,7 @@
 This script is way more advanced than other scripts out there
 
 - allows generating HamsterKombat coupon code for free using your machine.
-- acts as close as possible to real games.
+- acts as close as possible to real games with delays for game re-installations.
 - it doesn't use any proxies, it doesn't make any requests to external APIs.
 
 If you are afraid that your IP will get blocked you can simply use VPN or proxy.
@@ -14,7 +14,7 @@ When new games are out I will need some time to test and update this gist. \
 I focus on making this gist as close as possible to real games. \
 Be patient. I Usually roll out update after 2PM UTC. \
 If you want to use other people insecure scripts with just app token and promo id set - it's up to you. \
-I’m using ios device to test games and intercept requests.
+I’m using ios device and android emulator to test games and intercept requests.
 
 > All comments baiting people to use your implementation will be deleted.
 
@@ -48,7 +48,8 @@ This is JS script that meant to be run with Node.js
 
 ## How Long It Takes
 
-For one token on average it takes 2 minutes 20 seconds. For 6 games and 4 keys - 56 minutes.
+For one token on average it takes 5 minutes (during weekends). \
+For 6 games and 4 keys - 120 minutes.
 
 ## How I Get App Token and Promo Id
 
