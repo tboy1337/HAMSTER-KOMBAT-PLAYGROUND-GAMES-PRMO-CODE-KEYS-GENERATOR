@@ -27,11 +27,6 @@ I do this to be able to generate many keys without waiting.
 
 ## How To Use It
 
-### With Browser Console
-
-Just copy/paste script below and hit Enter.
-> If you get a warning that you can't paste unknown code type `allow pasting` into console.
-
 ### With Node.js
 
 Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with Node.js.
@@ -48,8 +43,8 @@ node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1
 
 ### With Python
 
-It's not available in Python :) \
-This is JS script that meant to be run in browser/node.js
+This script is not available in Python :) \
+This is JS script that meant to be run with Node.js
 
 ## How Long It Takes
 
