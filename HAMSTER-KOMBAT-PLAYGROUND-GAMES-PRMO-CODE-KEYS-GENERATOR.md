@@ -6,8 +6,7 @@ This script is way more advanced than other scripts out there.
 - acts as close as possible to real games with delays for game re-installations.
 - it doesn't use any proxies, it doesn't make any requests to external APIs.
 
-If you are afraid that your IP will get blocked you can simply use VPN or proxy. \
-Here's tutorial on how to use it: https://youtu.be/D0z52SyqNqI
+If you are afraid that your IP will get blocked you can simply use VPN or proxy.
 
 ## Important Notice
 
@@ -28,7 +27,9 @@ I do this to be able to generate many keys without waiting.
 
 ## How To Use It
 
-### With Node.js
+Video tutorial: https://youtu.be/D0z52SyqNqI
+
+### With Node.js (Windows, Linux, macOS)
 
 Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with Node.js.
 
@@ -36,13 +37,13 @@ Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with N
 node hamster-kombat-playground-games-promo-keys-generator.js
 ```
 
-### With Node.js One-Liner
+### With Node.js One-Liner (Linux, macOS)
 
 ```shell
 node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js)"
 ```
 
-### With Python
+### With Python (N/A)
 
 This script is not available in Python :) \
 This is JS script that meant to be run with Node.js
