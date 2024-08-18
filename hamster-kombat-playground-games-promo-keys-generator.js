@@ -148,7 +148,10 @@ async function globalDelay(ms) {
 function globalId(type) {
   switch (type) {
     case 'rand32': {
-      return Buffer.from(crypto.getRandomValues(new Uint8Array(16))).toString('hex');
+      return Array.from(
+        crypto.getRandomValues(new Uint8Array(16)),
+        (it) => it.toString(16).padStart(2, '0'),
+      ).join('');
     }
     case 'uuid':
     case 'uuid-upper': {
