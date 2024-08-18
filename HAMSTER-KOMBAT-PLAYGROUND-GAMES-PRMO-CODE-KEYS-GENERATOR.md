@@ -1,12 +1,13 @@
 # HamsterKombat Playground Promo Code Keys Generator
 
-This script is way more advanced than other scripts out there
+This script is way more advanced than other scripts out there.
 
 - allows generating HamsterKombat coupon code for free using your machine.
 - acts as close as possible to real games with delays for game re-installations.
 - it doesn't use any proxies, it doesn't make any requests to external APIs.
 
-If you are afraid that your IP will get blocked you can simply use VPN or proxy.
+If you are afraid that your IP will get blocked you can simply use VPN or proxy. \
+Here's tutorial on how to use it: https://youtu.be/D0z52SyqNqI
 
 ## Important Notice
 
@@ -58,7 +59,7 @@ While doing this I intercept and inspect requests with Wireshark looking for clu
 
 ## Node.js Version
 
-I personally test on Node.js v20, though I'm pretty sure it will work on v18 too.
+I personally test on Node.js v18 and v20. On version 16 global fetch is unavailable so this version is not supported.
 
 ## Support Author
 
