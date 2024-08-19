@@ -25,6 +25,13 @@ For every request I generate unique client id. \
 For every request games re-use same client id. \
 I do this to be able to generate many keys without waiting.
 
+## Difference Between Other Generators
+
+1. Sends exactly the same headers as real games.
+2. Sends actual events extracted from the games.
+3. Uses randomized delays for events.
+4. Simulates app reinstall time.
+
 ## How To Use It
 
 Video tutorial: https://youtu.be/D0z52SyqNqI
@@ -50,8 +57,13 @@ This is JS script that meant to be run with Node.js
 
 ## How Long It Takes
 
-For one token on average it takes 5 minutes (during weekends). \
-For 6 games and 4 keys - 120 minutes.
+### During Weekdays
+
+For one token on average it takes 4m30s. For 6 games and 4 keys - 104 minutes.
+
+### During Weekends
+
+For one token on average it takes 5m. For 6 games and 4 keys - 120 minutes.
 
 ## How I Get App Token and Promo Id
 
