@@ -1,4 +1,4 @@
-const DEBUG = false;
+const DEBUG = process.env.DEBUG === 'true';
 const SERVER_ERROR_COOLDOWN = 300_000;
 const SERVER_ERROR_RETRIES = 3;
 const WITH_REINSTALL_TIME = true;
@@ -306,16 +306,32 @@ async function getPromoCode(gp, gameKey) {
 }
 
 async function main() {
-  const gameKeys = Object.keys(games);
-  const keys = 4;
+  const args = {
+    exclude: [],
+    keys: 4,
+  };
+
+  for (let i = 1; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+
+    if (arg.startsWith('--exclude=')) {
+      args.exclude = arg.slice(10).split(',').map((it) => it.trim()).filter((it) => it !== '');
+      Logger.debug('Applied exclude filter:', args.exclude);
+    } else if (arg.startsWith('--keys=')) {
+      args.keys = Number.parseInt(arg.slice(7), 10) || 4;
+      Logger.debug('Applied keys filter:', args.keys);
+    }
+  }
+
+  const gameKeys = Object.keys(games).filter((it) => !args.exclude.includes(it));
   const gp = new GamePromo();
 
   for (let k = 0; k < gameKeys.length; k++) {
-    for (let i = 0; i < keys; i++) {
+    for (let i = 0; i < args.keys; i++) {
       const code = await getPromoCode(gp, gameKeys[k]);
       Logger.info(code);
 
-      if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== keys - 1) {
+      if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== args.keys - 1) {
         await globalDelay((Math.floor(Math.random() * 11) + 20) * 1_000);
       }
     }
