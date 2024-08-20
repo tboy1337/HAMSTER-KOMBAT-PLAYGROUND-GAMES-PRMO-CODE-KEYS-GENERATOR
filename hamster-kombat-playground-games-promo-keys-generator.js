@@ -213,7 +213,21 @@ class GamePromo {
     };
 
     Logger.debug(url, options);
-    const res = await fetch(url, options);
+    let res;
+
+    try {
+      res = await fetch(url, options);
+    } catch (err) {
+      if (retry < SERVER_ERROR_RETRIES) {
+        Logger.info('Received network error, will retry after cooldown period.');
+        Logger.debug(err);
+
+        await globalDelay(SERVER_ERROR_COOLDOWN);
+        return this.fetchApi(path, body, retry + 1);
+      }
+
+      throw err;
+    }
 
     if (!res.ok) {
       if (DEBUG) {

@@ -36,6 +36,12 @@ I do this to be able to generate many keys without waiting.
 
 Video tutorial: https://youtu.be/D0z52SyqNqI
 
+### With Node.js One-Liner (Linux, macOS)
+
+```shell
+node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js)"
+```
+
 ### With Node.js (Windows, Linux, macOS)
 
 Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with Node.js.
@@ -44,10 +50,10 @@ Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with N
 node hamster-kombat-playground-games-promo-keys-generator.js
 ```
 
-### With Node.js One-Liner (Linux, macOS)
+**With Arguments**
 
 ```shell
-node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js)"
+node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE" --keys=2
 ```
 
 ### With Python (N/A)
