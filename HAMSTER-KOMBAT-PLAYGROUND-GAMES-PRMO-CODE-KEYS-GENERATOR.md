@@ -53,7 +53,7 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 **With Arguments**
 
 ```shell
-node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE" --keys=2
+node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE" --keys=2 --device=android
 ```
 
 ### With Python (N/A)
