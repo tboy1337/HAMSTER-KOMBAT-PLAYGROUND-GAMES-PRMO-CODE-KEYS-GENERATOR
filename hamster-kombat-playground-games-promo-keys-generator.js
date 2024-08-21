@@ -4,6 +4,26 @@ const SERVER_ERROR_RETRIES = 3;
 const WITH_REINSTALL_TIME = true;
 
 const games = {
+  POLY: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
+    setup('promo-id', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
+    setup('unity-version', '2021.3.39f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'Polysphere/147 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2021.3.39f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login({ clientOrigin: origin, clientId: id('uuid'), clientVersion: '1.15.2' });
+
+    while (!instance.hasCode) {
+      await delay(10_000);
+      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'test' });
+    }
+
+    await collect();
+  },
   TWERK: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '61308365-9d16-4040-8bb0-2f4a4c69074c');
     setup('promo-id', '61308365-9d16-4040-8bb0-2f4a4c69074c');
@@ -285,12 +305,18 @@ class GamePromo {
     }
   }
 
-  async getCode(gameKey) {
+  async getCode(gameKey, device) {
     this.authToken = null;
     this.config = {};
     this.hasCode = false;
     this.key = null;
-    this.origin = Math.random() < 0.5 ? 'ios' : 'android';
+
+    if (typeof device === 'string') {
+      this.origin = device;
+    } else {
+      this.origin = Math.random() < 0.5 ? 'ios' : 'android';
+    }
+
     Logger.debug('origin:', this.origin);
 
     await games[gameKey]({
@@ -315,12 +341,13 @@ class GamePromo {
   }
 }
 
-async function getPromoCode(gp, gameKey) {
-  return gp.getCode(gameKey);
+async function getPromoCode(gp, gameKey, device) {
+  return gp.getCode(gameKey, device);
 }
 
 async function main() {
   const args = {
+    device: null,
     exclude: [],
     keys: 4,
   };
@@ -328,7 +355,14 @@ async function main() {
   for (let i = 1; i < process.argv.length; i++) {
     const arg = process.argv[i];
 
-    if (arg.startsWith('--exclude=')) {
+    if (arg.startsWith('--device=')) {
+      const device = arg.slice(9);
+
+      if (device === 'android' || device === 'ios') {
+        args.device = device;
+        Logger.debug('Applied device filter:', args.device);
+      }
+    } else if (arg.startsWith('--exclude=')) {
       args.exclude = arg.slice(10).split(',').map((it) => it.trim()).filter((it) => it !== '');
       Logger.debug('Applied exclude filter:', args.exclude);
     } else if (arg.startsWith('--keys=')) {
@@ -342,7 +376,7 @@ async function main() {
 
   for (let k = 0; k < gameKeys.length; k++) {
     for (let i = 0; i < args.keys; i++) {
-      const code = await getPromoCode(gp, gameKeys[k]);
+      const code = await getPromoCode(gp, gameKeys[k], args.device);
       Logger.info(code);
 
       if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== args.keys - 1) {
