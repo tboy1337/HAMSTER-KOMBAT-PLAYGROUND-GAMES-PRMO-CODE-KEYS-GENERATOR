@@ -1,9 +1,23 @@
-const DEBUG = process.env.DEBUG === 'true';
+/**
+ * HamsterKombat Playground Games Promo Code Keys Generator
+ * @author Aaron Delasy
+ * @version 1.0.0
+ */
+
+const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
+const TIMING_STRATEGY = parseArg('timing-strategy', (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
 const SERVER_ERROR_COOLDOWN = 300_000;
 const SERVER_ERROR_RETRIES = 3;
 const WITH_REINSTALL_TIME = true;
+const DEVICE = parseArg(['d', 'device'], (it) => (['android', 'ios'].includes(it) ? it : null));
+const EXCLUDE = parseArg(['e', 'exclude'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
+const KEYS = parseArg(['k', 'keys'], (it) => Number.parseInt(it, 10) || null, 4);
 
-const games = {
+//
+// Games
+//
+
+const GAMES = {
   POLY: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
     setup('promo-id', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
@@ -18,7 +32,7 @@ const games = {
     await login({ clientOrigin: origin, clientId: id('uuid'), clientVersion: '1.15.2' });
 
     while (!instance.hasCode) {
-      await delay(10_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 10_000 : 3_000);
       await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'test' });
     }
 
@@ -38,7 +52,7 @@ const games = {
     await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
 
     while (!instance.hasCode) {
-      await delay(20_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 20_000);
       await event({ eventId: 'StartLevel', eventOrigin: 'undefined' });
     }
 
@@ -57,7 +71,7 @@ const games = {
     await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
 
     while (!instance.hasCode) {
-      await delay(20_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
       await event({ eventOrigin: 'undefined', eventId: id('uuid'), eventType: 'spend-energy' });
     }
 
@@ -77,7 +91,7 @@ const games = {
     await login({ clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'), clientOrigin: origin });
 
     for (let i = 0; !instance.hasCode; i++) {
-      await delay(120_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 120_000);
       await event({ eventId: id('uuid'), eventType: 'MiniQuest', eventOrigin: 'undefined' });
     }
 
@@ -97,7 +111,7 @@ const games = {
     await login({ clientOrigin: origin, clientId: id('uuid'), clientVersion: '1.78.33' });
 
     while (!instance.hasCode) {
-      await delay(20_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 20_000);
       await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'cube_sent' });
     }
 
@@ -117,7 +131,7 @@ const games = {
     await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'), clientVersion: '2.4.16' });
 
     while (!instance.hasCode) {
-      await delay(120_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 600_000 : 120_000);
       await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'hitStatue' });
     }
 
@@ -126,12 +140,14 @@ const games = {
   BIKE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'd28721be-fd2d-4b45-869e-9f253b554e50');
     setup('promo-id', '43e35910-c168-4634-ad4f-52fd764a843f');
-    // todo(delasy): Actually scan BIKE game headers
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
+    await login({
+      clientOrigin: origin === 'android' ? 'deviceid' : 'ios',
+      clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d'),
+    });
 
     while (!instance.hasCode) {
-      await delay(20_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
       await event({ eventId: id('uuid'), eventOrigin: 'undefined' });
     }
 
@@ -139,30 +155,35 @@ const games = {
   },
 };
 
-class Logger {
-  static debug() {
-    if (!DEBUG) {
-      return;
-    }
+//
+// Functions
+//
 
-    console.log.apply(null, arguments);
+function debug(...args) {
+  if (!DEBUG) {
+    return;
   }
 
-  static info() {
-    console.info.apply(null, arguments);
-  }
-
-  static panic() {
-    console.error.apply(null, arguments);
-  }
+  console.log.apply(null, [new Date(), ...args]);
 }
 
 async function globalDelay(ms) {
-  Logger.debug(`Waiting ${ms}ms`);
+  debug(`Waiting ${ms}ms`);
 
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
+}
+
+function uuidv4() {
+  return '10000000-1000-4000-8000-100000000000'.replace(
+    /[018]/g,
+    (c) => (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16),
+  );
+}
+
+async function getPromoCode(gp, gameKey) {
+  return gp.getCode(gameKey);
 }
 
 function globalId(type) {
@@ -175,12 +196,7 @@ function globalId(type) {
     }
     case 'uuid':
     case 'uuid-upper': {
-      const val = '10000000-1000-4000-8000-100000000000'.replace(
-        /[018]/g,
-        (c) => (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16),
-      );
-
-      return type === 'uuid-upper' ? val.toUpperCase() : val;
+      return type === 'uuid-upper' ? uuidv4().toUpperCase() : uuidv4();
     }
     case 'ts7d':
     case 'ts19d': {
@@ -195,13 +211,44 @@ function globalId(type) {
   }
 }
 
+function parseArg(names, parser, fallback = null) {
+  if (typeof process === 'undefined' || !Array.isArray(process.argv)) {
+    return fallback;
+  }
+
+  for (let i = 1; i < process.argv.length; i++) {
+    const arg = process.argv[i];
+
+    for (let j = 0; j < names.length; j++) {
+      const name = names[j];
+
+      if (arg.toLowerCase().startsWith(`--${name}=`)) {
+        const val = arg.slice(name.length + 3);
+        const parsed = parser(val);
+
+        if (parsed !== null && name !== 'debug') {
+          debug(`Applied filter "${name}":`, parsed);
+        }
+
+        return parsed === null ? fallback : parsed;
+      }
+    }
+  }
+
+  return fallback;
+}
+
+//
+// Classes
+//
+
 class GamePromo {
   constructor() {
     this.authToken = null;
     this.config = {};
     this.hasCode = false;
     this.key = null;
-    this.origin = 'ios';
+    this.origin = null;
   }
 
   async fetchApi(path, body = null, retry = 0) {
@@ -227,20 +274,19 @@ class GamePromo {
 
     const options = {
       method: 'POST',
-      cache: 'no-store',
       headers,
       body: JSON.stringify(body),
     };
 
-    Logger.debug(url, options);
+    debug(url, options);
     let res;
 
     try {
       res = await fetch(url, options);
     } catch (err) {
       if (retry < SERVER_ERROR_RETRIES) {
-        Logger.info('Received network error, will retry after cooldown period.');
-        Logger.debug(err);
+        console.info('Received network error, will retry after cooldown period.');
+        debug(err);
 
         await globalDelay(SERVER_ERROR_COOLDOWN);
         return this.fetchApi(path, body, retry + 1);
@@ -252,11 +298,11 @@ class GamePromo {
     if (!res.ok) {
       if (DEBUG) {
         const text = await res.text();
-        Logger.debug(text);
+        debug(text);
       }
 
       if (retry < SERVER_ERROR_RETRIES) {
-        Logger.info('Received internal server error, will retry after cooldown period.');
+        console.info('Received internal server error, will retry after cooldown period.');
         await globalDelay(SERVER_ERROR_COOLDOWN);
         return this.fetchApi(path, body, retry + 1);
       }
@@ -265,7 +311,7 @@ class GamePromo {
     }
 
     const data = await res.json();
-    Logger.debug(data);
+    debug(data);
     return data;
   }
 
@@ -305,21 +351,15 @@ class GamePromo {
     }
   }
 
-  async getCode(gameKey, device) {
+  async getCode(gameKey) {
     this.authToken = null;
     this.config = {};
     this.hasCode = false;
     this.key = null;
+    this.origin = DEVICE ?? Math.random() < 0.5 ? 'ios' : 'android';
+    debug('origin:', this.origin);
 
-    if (typeof device === 'string') {
-      this.origin = device;
-    } else {
-      this.origin = Math.random() < 0.5 ? 'ios' : 'android';
-    }
-
-    Logger.debug('origin:', this.origin);
-
-    await games[gameKey]({
+    await GAMES[gameKey]({
       collect: this.collectFetch.bind(this),
       delay: async (ms) => {
         const totalMs = Math.floor(ms * (Math.random() / 4 + 1));
@@ -341,49 +381,89 @@ class GamePromo {
   }
 }
 
-async function getPromoCode(gp, gameKey, device) {
-  return gp.getCode(gameKey, device);
+class Queue {
+  constructor() {
+    const self = this;
+
+    this.items = [];
+    this.workers = [
+      {
+        id: uuidv4(),
+        available: true,
+        async run(item) {
+          item.started = true;
+          this.available = false;
+          await item.cb();
+          this.available = true;
+          self.tick();
+        },
+      },
+    ];
+  }
+
+  hasAvailableWorkers() {
+    return this.workers.some((it) => it.available);
+  }
+
+  nextAvailableWorker() {
+    return this.workers.find((it) => it.available);
+  }
+
+  tick() {
+    debug('Queue tick');
+
+    if (!this.hasAvailableWorkers()) {
+      return;
+    }
+
+    for (let i = 0; i < this.items.length; i++) {
+      const item = this.items[i];
+
+      if (item.started) {
+        continue;
+      }
+
+      debug('Running:', item.id);
+      this.nextAvailableWorker().run(item);
+
+      if (!this.hasAvailableWorkers()) {
+        return;
+      }
+    }
+  }
+
+  push(cb) {
+    this.items.push({
+      id: uuidv4(),
+      cb,
+      started: false,
+    });
+
+    this.tick();
+  }
 }
+
+//
+// Main
+//
 
 async function main() {
-  const args = {
-    device: null,
-    exclude: [],
-    keys: 4,
-  };
-
-  for (let i = 1; i < process.argv.length; i++) {
-    const arg = process.argv[i];
-
-    if (arg.startsWith('--device=')) {
-      const device = arg.slice(9);
-
-      if (device === 'android' || device === 'ios') {
-        args.device = device;
-        Logger.debug('Applied device filter:', args.device);
-      }
-    } else if (arg.startsWith('--exclude=')) {
-      args.exclude = arg.slice(10).split(',').map((it) => it.trim()).filter((it) => it !== '');
-      Logger.debug('Applied exclude filter:', args.exclude);
-    } else if (arg.startsWith('--keys=')) {
-      args.keys = Number.parseInt(arg.slice(7), 10) || 4;
-      Logger.debug('Applied keys filter:', args.keys);
-    }
-  }
-
-  const gameKeys = Object.keys(games).filter((it) => !args.exclude.includes(it));
+  const gameKeys = Object.keys(GAMES).filter((it) => !EXCLUDE.includes(it));
   const gp = new GamePromo();
+  const queue = new Queue();
 
   for (let k = 0; k < gameKeys.length; k++) {
-    for (let i = 0; i < args.keys; i++) {
-      const code = await getPromoCode(gp, gameKeys[k], args.device);
-      Logger.info(code);
+    for (let i = 0; i < KEYS; i++) {
+      queue.push(async () => {
+        const code = await getPromoCode(gp, gameKeys[k]);
+        console.info(code);
 
-      if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== args.keys - 1) {
-        await globalDelay((Math.floor(Math.random() * 11) + 20) * 1_000);
-      }
+        if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== KEYS - 1) {
+          await globalDelay((Math.floor(Math.random() * 11) + 20) * 1_000);
+        }
+      });
     }
   }
 }
 
-main().catch(Logger.panic);
+main().catch(console.error);

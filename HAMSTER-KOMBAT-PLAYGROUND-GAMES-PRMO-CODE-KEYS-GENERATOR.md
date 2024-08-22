@@ -53,7 +53,13 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 **With Arguments**
 
 ```shell
-node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE" --keys=2 --device=android
+node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE"
+node hamster-kombat-playground-games-promo-keys-generator.js --keys=2
+node hamster-kombat-playground-games-promo-keys-generator.js --device=android
+node hamster-kombat-playground-games-promo-keys-generator.js --device=ios
+node hamster-kombat-playground-games-promo-keys-generator.js --debug=true
+node hamster-kombat-playground-games-promo-keys-generator.js --timing-strategy=realistic
+node hamster-kombat-playground-games-promo-keys-generator.js --timing-strategy=fastest
 ```
 
 ### With Python (N/A)
@@ -63,13 +69,18 @@ This is JS script that meant to be run with Node.js
 
 ## How Long It Takes
 
-### During Weekdays
+**Fastest Strategy**
 
-For one token on average it takes 4m30s. For 6 games and 4 keys - 104 minutes.
+POLY ~ 1m \
+TWERK ~ 4m \
+MERGE ~ 3m \
+CLONE ~ 11m \
+CUBE ~ 1m \
+TRAIN ~ 2m \
+BIKE ~ 5m \
+Total: 108 minutes
 
-### During Weekends
-
-For one token on average it takes 5m. For 6 games and 4 keys - 120 minutes.
+> During weekends numbers increase to almost 2x.
 
 ## How I Get App Token and Promo Id
 
@@ -78,7 +89,8 @@ While doing this I intercept and inspect requests with Wireshark looking for clu
 
 ## Node.js Version
 
-I personally test on Node.js v18 and v20. On version 16 global fetch is unavailable so this version is not supported.
+I personally test on Node.js v18 and v20. \
+On version 16 global fetch is unavailable so this version an below are not supported.
 
 ## Support Author
 
