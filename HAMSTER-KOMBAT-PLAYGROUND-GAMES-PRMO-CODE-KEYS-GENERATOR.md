@@ -42,6 +42,12 @@ Video tutorial: https://youtu.be/D0z52SyqNqI
 node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js)"
 ```
 
+### With Node.js One-Liner (Windows)
+
+```powershell
+node -e (Invoke-RestMethod -Uri 'https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js')
+```
+
 ### With Node.js (Windows, Linux, macOS)
 
 Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with Node.js.
@@ -50,17 +56,29 @@ Copy `hamster-kombat-playground-games-promo-keys-generator.js` and run it with N
 node hamster-kombat-playground-games-promo-keys-generator.js
 ```
 
-**With Arguments**
+## Script Arguments
 
-```shell
-node hamster-kombat-playground-games-promo-keys-generator.js --exclude="BIKE, MERGE"
-node hamster-kombat-playground-games-promo-keys-generator.js --keys=2
-node hamster-kombat-playground-games-promo-keys-generator.js --device=android
-node hamster-kombat-playground-games-promo-keys-generator.js --device=ios
-node hamster-kombat-playground-games-promo-keys-generator.js --debug=true
-node hamster-kombat-playground-games-promo-keys-generator.js --timing-strategy=realistic
-node hamster-kombat-playground-games-promo-keys-generator.js --timing-strategy=fastest
-```
+`--timing-strategy` - What timing strategy to use. Realistic - takes longer but uses delays of real users, fastest - takes faster but has a great risk of your keys being removed during Airdrop. \
+&emsp;Values: `realistice`, `fastest`. \
+&emsp;Default: `realistic`. \
+&emsp;Example: `--timing-strategy=fastest`.
+
+`--device`, `-d` - Force script to use only one specific device. \
+&emsp;Values: `android`, `ios`. \
+&emsp;Default: random device selected for each key. \
+&emsp;Example: `--device=ios`, `-d=android`.
+
+`--exclude`, `-e` - Game names to exclude. \
+&emsp;Default: empty string. \
+&emsp;Example: `--exclude="BIKE, MERGE"`, `-e=BIKE`.
+
+`--keys`, `-k` - Number of keys to generate for each game. \
+&emsp;Default: `4`. \
+&emsp;Example: `--keys=4`, `-k=1`.
+
+`--debug` - Whether to show debug data. \
+&emsp;Default: `false`. \
+&emsp;Example: `--debug=true`.
 
 ### With Python (N/A)
 
