@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.1.0
+ * @version 1.2.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -204,7 +204,7 @@ function debug(...args) {
     return;
   }
 
-  console.log.apply(null, [new Date(), ...args]);
+  console.error.apply(null, [new Date(), ...args]);
 }
 
 async function globalDelay(ms) {
@@ -325,7 +325,7 @@ class GamePromo {
       res = await fetch(url, options);
     } catch (err) {
       if (retry < SERVER_ERROR_RETRIES) {
-        console.info('Received network error, will retry after cooldown period.');
+        console.error('Received network error, will retry after cooldown period.');
         debug(err);
 
         await globalDelay(SERVER_ERROR_COOLDOWN);
@@ -342,7 +342,7 @@ class GamePromo {
       }
 
       if (retry < SERVER_ERROR_RETRIES) {
-        console.info('Received internal server error, will retry after cooldown period.');
+        console.error('Received internal server error, will retry after cooldown period.');
         await globalDelay(SERVER_ERROR_COOLDOWN);
         return this.fetchApi(path, body, retry + 1);
       }
