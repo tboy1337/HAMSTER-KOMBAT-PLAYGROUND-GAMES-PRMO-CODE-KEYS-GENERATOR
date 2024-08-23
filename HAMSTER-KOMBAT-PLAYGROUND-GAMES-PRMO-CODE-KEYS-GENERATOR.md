@@ -71,14 +71,15 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+TRIM ~ 3m \
+RACE ~ 2m \
 POLY ~ 1m \
 TWERK ~ 4m \
 MERGE ~ 3m \
 CLONE ~ 11m \
 CUBE ~ 1m \
 TRAIN ~ 2m \
-BIKE ~ 5m \
-Total: 108 minutes
+BIKE ~ 5m
 
 > During weekends numbers increase to almost 2x.
 

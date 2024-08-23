@@ -1,11 +1,11 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
-const TIMING_STRATEGY = parseArg('timing-strategy', (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
+const TIMING_STRATEGY = parseArg(['timing-strategy'], (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
 const SERVER_ERROR_COOLDOWN = 300_000;
 const SERVER_ERROR_RETRIES = 3;
 const WITH_REINSTALL_TIME = true;
@@ -18,6 +18,46 @@ const KEYS = parseArg(['k', 'keys'], (it) => Number.parseInt(it, 10) || null, 4)
 //
 
 const GAMES = {
+  TRIM: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
+    setup('promo-id', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
+    setup('unity-version', '2021.3.17f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'MowandTrim/170 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2021.3.17f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
+    }
+
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
+      await event({ eventId: 'StartLevel', eventOrigin: 'undefined' });
+    }
+
+    await collect();
+  },
+  RACE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', '8814a785-97fb-4177-9193-ca4180ff9da8');
+    setup('promo-id', '8814a785-97fb-4177-9193-ca4180ff9da8');
+    setup('unity-version', '2020.3.18f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'Truckbountyhole/12 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2020.3.18f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login({ clientOrigin: origin, clientId: id('uuid') });
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
+      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'racing' });
+    }
+
+    await collect();
+  },
   POLY: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
     setup('promo-id', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
