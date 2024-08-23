@@ -99,6 +99,18 @@ CUBE ~ 1m \
 TRAIN ~ 2m \
 BIKE ~ 5m
 
+**Realistic Strategy**
+
+TRIM ~ 8m \
+RACE ~ 7m \
+POLY ~ 5m \
+TWERK ~ 7m \
+MERGE ~ 8m \
+CLONE ~ 15m \
+CUBE ~ 9m \
+TRAIN ~ 12m \
+BIKE ~ 13m
+
 > During weekends numbers increase to almost 2x.
 
 ## How I Get App Token and Promo Id
