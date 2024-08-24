@@ -42,6 +42,12 @@ Video tutorial: https://youtu.be/D0z52SyqNqI
 node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1ff4ddb458d968/raw/hamster-kombat-playground-games-promo-keys-generator.js)"
 ```
 
+With Arguments:
+
+```shell
+node -e "..." -- --timing-strategy=fastest -k=1
+```
+
 ### With Node.js One-Liner (Windows)
 
 ```powershell
