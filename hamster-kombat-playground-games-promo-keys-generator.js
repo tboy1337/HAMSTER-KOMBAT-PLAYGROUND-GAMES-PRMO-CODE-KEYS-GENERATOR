@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.2.0
+ * @version 1.3.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -195,6 +195,10 @@ const GAMES = {
   },
 };
 
+const GAMES_EXPIRATIONS = {
+  CLONE: new Date('2024-08-26T00:00:00.000Z'),
+};
+
 //
 // Functions
 //
@@ -276,6 +280,14 @@ function parseArg(names, parser, fallback = null) {
   }
 
   return fallback;
+}
+
+function filterExpired(gameKey) {
+  if (!Object.prototype.hasOwnProperty.call(GAMES_EXPIRATIONS, gameKey)) {
+    return true;
+  }
+
+  return GAMES_EXPIRATIONS[gameKey] > new Date();
 }
 
 //
@@ -488,7 +500,7 @@ class Queue {
 //
 
 async function main() {
-  const gameKeys = Object.keys(GAMES).filter((it) => !EXCLUDE.includes(it));
+  const gameKeys = Object.keys(GAMES).filter((it) => !EXCLUDE.includes(it)).filter(filterExpired);
   const gp = new GamePromo();
   const queue = new Queue();
 
