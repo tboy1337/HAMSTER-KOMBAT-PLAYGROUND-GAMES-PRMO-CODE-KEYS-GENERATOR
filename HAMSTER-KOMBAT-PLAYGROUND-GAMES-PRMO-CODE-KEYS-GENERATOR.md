@@ -108,7 +108,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
-CAFE ~ N/A \
+CAFE ~ 23m \
 TRIM ~ 8m \
 RACE ~ 7m \
 POLY ~ 5m \
