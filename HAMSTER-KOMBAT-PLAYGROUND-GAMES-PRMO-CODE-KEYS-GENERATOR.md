@@ -95,6 +95,7 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+CAFE ~ 4m \
 TRIM ~ 3m \
 RACE ~ 2m \
 POLY ~ 1m \
@@ -107,6 +108,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+CAFE ~ N/A \
 TRIM ~ 8m \
 RACE ~ 7m \
 POLY ~ 5m \

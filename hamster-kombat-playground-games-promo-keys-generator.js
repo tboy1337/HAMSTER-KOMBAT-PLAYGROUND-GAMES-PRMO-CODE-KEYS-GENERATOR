@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.3.0
+ * @version 1.4.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -18,6 +18,19 @@ const KEYS = parseArg(['k', 'keys'], (it) => Number.parseInt(it, 10) || null, 4)
 //
 
 const GAMES = {
+  CAFE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
+    setup('promo-id', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
+
+    await login({ clientId: id('rand16'), clientOrigin: origin, clientVersion: '2.24.0' });
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 90_000 : 20_000);
+      await event({ eventId: id('ts'), eventOrigin: 'undefined', eventType: '5visitorsChecks' });
+    }
+
+    await collect();
+  },
   TRIM: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
     setup('promo-id', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
@@ -232,6 +245,12 @@ async function getPromoCode(gp, gameKey) {
 
 function globalId(type) {
   switch (type) {
+    case 'rand16': {
+      return Array.from(
+        crypto.getRandomValues(new Uint8Array(8)),
+        (it) => it.toString(16).padStart(2, '0'),
+      ).join('');
+    }
     case 'rand32': {
       return Array.from(
         crypto.getRandomValues(new Uint8Array(16)),
@@ -241,6 +260,9 @@ function globalId(type) {
     case 'uuid':
     case 'uuid-upper': {
       return type === 'uuid-upper' ? uuidv4().toUpperCase() : uuidv4();
+    }
+    case 'ts': {
+      return Date.now().toString();
     }
     case 'ts7d':
     case 'ts19d': {
