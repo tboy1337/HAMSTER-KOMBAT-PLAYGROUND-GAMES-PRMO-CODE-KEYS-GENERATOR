@@ -209,7 +209,9 @@ const GAMES = {
 };
 
 const GAMES_EXPIRATIONS = {
+  BIKE: new Date('2024-08-30T07:30:00.000Z'),
   CLONE: new Date('2024-08-26T00:00:00.000Z'),
+  RACE: new Date('2024-08-30T07:30:00.000Z'),
 };
 
 //
