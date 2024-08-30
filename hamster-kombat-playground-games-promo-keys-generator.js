@@ -4,8 +4,6 @@
  * @version 1.5.1
  */
 
-// todo add new keys to name of gist.
-
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
 const TIMING_STRATEGY = parseArg(['timing-strategy'], (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
 const SERVER_ERROR_COOLDOWN = 300_000;
@@ -236,9 +234,6 @@ const GAMES = {
   BIKE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'd28721be-fd2d-4b45-869e-9f253b554e50');
     setup('promo-id', '43e35910-c168-4634-ad4f-52fd764a843f');
-
-    // todo check headers
-    // todo check unity version
 
     await login({
       clientOrigin: origin === 'android' ? 'deviceid' : 'ios',
