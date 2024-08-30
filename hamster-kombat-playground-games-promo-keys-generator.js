@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.4.0
+ * @version 1.5.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -12,15 +12,60 @@ const WITH_REINSTALL_TIME = true;
 const DEVICE = parseArg(['d', 'device'], (it) => (['android', 'ios'].includes(it) ? it : null));
 const EXCLUDE = parseArg(['e', 'exclude'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
 const KEYS = parseArg(['k', 'keys'], (it) => Number.parseInt(it, 10) || null, 4);
+const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
 
 //
 // Games
 //
 
 const GAMES = {
+  ZOO: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
+    setup('promo-id', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
+    setup('unity-version', '2022.3.15f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'Zoopolis/1 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.15f1 (UnityWebRequest/1.0, libcurl/8.4.0-DEV)');
+    }
+
+    await login({
+      clientOrigin: origin,
+      clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'),
+      clientVersion: '1.2.8',
+    });
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 20_000);
+      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'ZoopolisEvent' });
+    }
+
+    await collect();
+  },
+  GANGS: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', 'b6de60a0-e030-48bb-a551-548372493523');
+    setup('promo-id', 'c7821fa7-6632-482c-9635-2bd5798585f9');
+
+    // todo check headers
+    // todo check unity version
+    // todo adjust realistic timings
+
+    await login({ clientOrigin: origin, clientId: `mj0rh_${id('rand32')}` });
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 40_000);
+      await event({ eventId: id('rand16-rand16'), eventOrigin: 'undefined' });
+    }
+
+    await collect();
+  },
   CAFE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
     setup('promo-id', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
+
+    // todo check headers
+    // todo check unity version
 
     await login({ clientId: id('rand16'), clientOrigin: origin, clientVersion: '2.24.0' });
 
@@ -194,6 +239,9 @@ const GAMES = {
     setup('app-token', 'd28721be-fd2d-4b45-869e-9f253b554e50');
     setup('promo-id', '43e35910-c168-4634-ad4f-52fd764a843f');
 
+    // todo check headers
+    // todo check unity version
+
     await login({
       clientOrigin: origin === 'android' ? 'deviceid' : 'ios',
       clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d'),
@@ -234,6 +282,18 @@ async function globalDelay(ms) {
   });
 }
 
+function randomBytes(len) {
+  return Array.from(
+    crypto.getRandomValues(new Uint8Array(len / 2)),
+    (it) => it.toString(16).padStart(2, '0'),
+  ).join('');
+}
+
+function randomDigits(len) {
+  const buf = Array(len).fill(null);
+  return buf.map(() => Math.floor(Math.random() * 10)).join('');
+}
+
 function uuidv4() {
   return '10000000-1000-4000-8000-100000000000'.replace(
     /[018]/g,
@@ -248,30 +308,28 @@ async function getPromoCode(gp, gameKey) {
 function globalId(type) {
   switch (type) {
     case 'rand16': {
-      return Array.from(
-        crypto.getRandomValues(new Uint8Array(8)),
-        (it) => it.toString(16).padStart(2, '0'),
-      ).join('');
+      return randomBytes(16);
+    }
+    case 'rand16-rand16': {
+      return `${randomBytes(16)}-${randomBytes(16)}`;
     }
     case 'rand32': {
-      return Array.from(
-        crypto.getRandomValues(new Uint8Array(16)),
-        (it) => it.toString(16).padStart(2, '0'),
-      ).join('');
+      return randomBytes(32);
     }
-    case 'uuid':
+    case 'uuid': {
+      return uuidv4();
+    }
     case 'uuid-upper': {
-      return type === 'uuid-upper' ? uuidv4().toUpperCase() : uuidv4();
+      return uuidv4().toUpperCase();
     }
     case 'ts': {
       return Date.now().toString();
     }
-    case 'ts7d':
+    case 'ts7d': {
+      return `${Date.now()}-${randomDigits(7)}`;
+    }
     case 'ts19d': {
-      const timestamp = Date.now();
-      const buf = Array(type === 'ts7d' ? 7 : 19).fill();
-      const digits = buf.map(() => Math.floor(Math.random() * 10)).join('');
-      return `${timestamp}-${digits}`;
+      return `${Date.now()}-${randomDigits(19)}`;
     }
     default: {
       throw new Error(`Tried generating unknown id '${type}'.`);
@@ -524,7 +582,13 @@ class Queue {
 //
 
 async function main() {
-  const gameKeys = Object.keys(GAMES).filter((it) => !EXCLUDE.includes(it)).filter(filterExpired);
+  const gameKeys = Object.keys(GAMES)
+    .filter((it) => !EXCLUDE.includes(it))
+    .filter((it) => ONLY.length === 0 || ONLY.includes(it))
+    .filter(filterExpired);
+
+  debug('Game keys:', gameKeys);
+
   const gp = new GamePromo();
   const queue = new Queue();
 

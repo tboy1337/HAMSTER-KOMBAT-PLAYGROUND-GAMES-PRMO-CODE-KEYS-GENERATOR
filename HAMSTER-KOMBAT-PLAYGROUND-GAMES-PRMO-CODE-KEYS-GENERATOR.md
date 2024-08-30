@@ -20,7 +20,7 @@ I’m using ios device and android emulator to test games and intercept requests
 
 ## Difference Between Real Games
 
-First and the only difference is Unique Client Id. \
+First and the only difference is Unique Client ID. \
 For every request I generate unique client id. \
 For every request games re-use same client id. \
 I do this to be able to generate many keys without waiting.
@@ -86,6 +86,10 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 &emsp;Default: `false`. \
 &emsp;Example: `--debug=true`.
 
+`--only`, `-o` - Script will process only name you provided with this option. \
+&emsp;Default: all games. \
+&emsp;Example: `--only="BIKE, MERGE"`, `-o=BIKE`.
+
 ### With Python (N/A)
 
 This script is not available in Python :) \
@@ -95,6 +99,8 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+ZOO ~ 2m \
+GANGS ~ 9m \
 CAFE ~ 4m \
 TRIM ~ 3m \
 RACE ~ 2m \
@@ -108,6 +114,8 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+ZOO ~ N/A \
+GANGS ~ N/A \
 CAFE ~ 23m \
 TRIM ~ 8m \
 RACE ~ 7m \
@@ -121,7 +129,7 @@ BIKE ~ 13m
 
 > During weekends numbers increase to almost 2x.
 
-## How I Get App Token and Promo Id
+## How I Get App Token and Promo ID
 
 I run game on physical device, I actually play the game (so you don't need to). \
 While doing this I intercept and inspect requests with Wireshark looking for clues.
@@ -129,7 +137,7 @@ While doing this I intercept and inspect requests with Wireshark looking for clu
 ## Node.js Version
 
 I personally test on Node.js v18 and v20. \
-On version 16 global fetch is unavailable so this version an below are not supported.
+On version 16 global fetch is unavailable so this version and below are not supported.
 
 ## Support Author
 
