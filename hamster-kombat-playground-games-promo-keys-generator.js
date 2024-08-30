@@ -1,8 +1,10 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.5.0
+ * @version 1.5.1
  */
+
+// todo add new keys to name of gist.
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
 const TIMING_STRATEGY = parseArg(['timing-strategy'], (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
@@ -30,11 +32,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.15f1 (UnityWebRequest/1.0, libcurl/8.4.0-DEV)');
     }
 
-    await login({
-      clientOrigin: origin,
-      clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'),
-      clientVersion: '1.2.8',
-    });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientVersion: '1.2.8' });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 20_000);
@@ -49,13 +47,13 @@ const GAMES = {
 
     // todo check headers
     // todo check unity version
-    // todo adjust realistic timings
+    // todo adjust realistic timing
 
-    await login({ clientOrigin: origin, clientId: `mj0rh_${id('rand32')}` });
+    await login({ clientOrigin: origin, clientId: id('s5_h32') });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 40_000);
-      await event({ eventId: id('rand16-rand16'), eventOrigin: 'undefined' });
+      await event({ eventId: id('h16-h16'), eventOrigin: 'undefined' });
     }
 
     await collect();
@@ -67,7 +65,7 @@ const GAMES = {
     // todo check headers
     // todo check unity version
 
-    await login({ clientId: id('rand16'), clientOrigin: origin, clientVersion: '2.24.0' });
+    await login({ clientId: id('h16'), clientOrigin: origin, clientVersion: '2.24.0' });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 90_000 : 20_000);
@@ -87,7 +85,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2021.3.17f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
@@ -147,7 +145,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 20_000);
@@ -166,7 +164,7 @@ const GAMES = {
       setup('user-agent', 'Mozilla/5.0 (Linux; Android 12; SM-S9110 Build/W528JS; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d') });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
@@ -186,7 +184,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.25f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'), clientOrigin: origin });
+    await login({ clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientOrigin: origin });
 
     for (let i = 0; !instance.hasCode; i++) {
       await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 120_000);
@@ -226,7 +224,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.20f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'uuid-upper' : 'rand32'), clientVersion: '2.4.16' });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientVersion: '2.4.16' });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 600_000 : 120_000);
@@ -244,7 +242,7 @@ const GAMES = {
 
     await login({
       clientOrigin: origin === 'android' ? 'deviceid' : 'ios',
-      clientId: id(origin === 'ios' ? 'ts7d' : 'ts19d'),
+      clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19'),
     });
 
     while (!instance.hasCode) {
@@ -294,6 +292,17 @@ function randomDigits(len) {
   return buf.map(() => Math.floor(Math.random() * 10)).join('');
 }
 
+function randomString(len, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+  const charsLen = chars.length;
+  let result = '';
+
+  for (let i = 0; i < len; i++) {
+    result += chars.charAt(Math.floor(Math.random() * charsLen));
+  }
+
+  return result;
+}
+
 function uuidv4() {
   return '10000000-1000-4000-8000-100000000000'.replace(
     /[018]/g,
@@ -305,31 +314,44 @@ async function getPromoCode(gp, gameKey) {
   return gp.getCode(gameKey);
 }
 
+/**
+ * Generates random string with provided type.
+ * Types explanation:
+ *   ts - timestamp.
+ *   h5 - random string in hex format of length 5.
+ *   s5 - random string of length 5.
+ *   5d - random string of digits of length 5.
+ *   uuid - string in UUID v4 format.
+ *   UUID - uppercase version of string in UUID v4 format.
+ */
 function globalId(type) {
   switch (type) {
-    case 'rand16': {
+    case 'h16': {
       return randomBytes(16);
     }
-    case 'rand16-rand16': {
+    case 'h16-h16': {
       return `${randomBytes(16)}-${randomBytes(16)}`;
     }
-    case 'rand32': {
+    case 'h32': {
       return randomBytes(32);
     }
-    case 'uuid': {
-      return uuidv4();
-    }
-    case 'uuid-upper': {
-      return uuidv4().toUpperCase();
+    case 's5_h32': {
+      return `${randomString(5)}_${randomBytes(32)}`;
     }
     case 'ts': {
       return Date.now().toString();
     }
-    case 'ts7d': {
+    case 'ts-d7': {
       return `${Date.now()}-${randomDigits(7)}`;
     }
-    case 'ts19d': {
+    case 'ts-d19': {
       return `${Date.now()}-${randomDigits(19)}`;
+    }
+    case 'uuid': {
+      return uuidv4();
+    }
+    case 'UUID': {
+      return uuidv4().toUpperCase();
     }
     default: {
       throw new Error(`Tried generating unknown id '${type}'.`);

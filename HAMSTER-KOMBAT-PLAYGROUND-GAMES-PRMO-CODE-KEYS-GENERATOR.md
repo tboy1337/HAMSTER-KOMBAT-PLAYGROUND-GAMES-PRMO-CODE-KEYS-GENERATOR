@@ -86,7 +86,7 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 &emsp;Default: `false`. \
 &emsp;Example: `--debug=true`.
 
-`--only`, `-o` - Script will process only name you provided with this option. \
+`--only`, `-o` - Script will process only names you provided with this option. \
 &emsp;Default: all games. \
 &emsp;Example: `--only="BIKE, MERGE"`, `-o=BIKE`.
 
