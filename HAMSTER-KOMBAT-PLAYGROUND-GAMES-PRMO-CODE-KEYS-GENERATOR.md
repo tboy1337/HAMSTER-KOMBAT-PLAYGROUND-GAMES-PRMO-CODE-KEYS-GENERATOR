@@ -69,6 +69,11 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 &emsp;Default: `realistic`. \
 &emsp;Example: `--timing-strategy=fastest`.
 
+`--client-strategy` - What client strategy to use. Unique - generates unique client id for every new key, keep - generates only one client id per game and re-uses it for every key. \
+&emsp;Values: `unique`, `keep`. \
+&emsp;Default: `unique`. \
+&emsp;Example: `--client-strategy=keep`.
+
 `--device`, `-d` - Force script to use only one specific device. \
 &emsp;Values: `android`, `ios`. \
 &emsp;Default: random device selected for each key. \
@@ -114,7 +119,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
-ZOO ~ N/A \
+ZOO ~ 11m \
 GANGS ~ N/A \
 CAFE ~ 23m \
 TRIM ~ 8m \
@@ -144,3 +149,11 @@ On version 16 global fetch is unavailable so this version and below are not supp
 If this gist helped you, consider helping me by giving a star to my main project: \
 [github.com/thelang-io/the](https://github.com/thelang-io/the) - a programming language I'm developing since 2018. \
 In advance, thanks a lot!
+
+## Changelog
+
+### 1.6.0
+
+Added `--client-strategy=keep` option to keep same client id when generating multiple keys.
+
+> When the key was generated you have 5 minutes to enter it inside HamsterKombat before it will start generating next key.

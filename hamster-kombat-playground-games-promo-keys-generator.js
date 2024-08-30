@@ -1,10 +1,11 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.5.1
+ * @version 1.6.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
+const CLIENT_STRATEGY = parseArg(['client-strategy'], (it) => (['keep', 'unique'].includes(it) ? it : null), 'unique');
 const TIMING_STRATEGY = parseArg(['timing-strategy'], (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
 const SERVER_ERROR_COOLDOWN = 300_000;
 const SERVER_ERROR_RETRIES = 3;
@@ -235,10 +236,7 @@ const GAMES = {
     setup('app-token', 'd28721be-fd2d-4b45-869e-9f253b554e50');
     setup('promo-id', '43e35910-c168-4634-ad4f-52fd764a843f');
 
-    await login({
-      clientOrigin: origin === 'android' ? 'deviceid' : 'ios',
-      clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19'),
-    });
+    await login({ clientOrigin: origin === 'ios' ? 'ios' : 'deviceid', clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
@@ -254,6 +252,8 @@ const GAMES_EXPIRATIONS = {
   CLONE: new Date('2024-08-26T00:00:00.000Z'),
   RACE: new Date('2024-08-30T07:30:00.000Z'),
 };
+
+const CLIENT = {};
 
 //
 // Functions
@@ -397,6 +397,7 @@ class GamePromo {
   constructor() {
     this.authToken = null;
     this.config = {};
+    this.gameKey = null;
     this.hasCode = false;
     this.key = null;
     this.origin = null;
@@ -471,6 +472,11 @@ class GamePromo {
   }
 
   async loginFetch(data) {
+    if (CLIENT_STRATEGY === 'keep' && CLIENT[this.gameKey] !== undefined) {
+      debug('Re-using auth token');
+      return;
+    }
+
     const res = await this.fetchApi('/promo/login-client', {
       appToken: this.config['app-token'],
       ...data,
@@ -478,6 +484,11 @@ class GamePromo {
 
     if (typeof res.clientToken === 'string' && res.clientToken !== '') {
       this.authToken = res.clientToken;
+
+      CLIENT[this.gameKey] = {
+        authToken: this.authToken,
+        origin: this.origin,
+      };
     }
   }
 
@@ -505,10 +516,17 @@ class GamePromo {
   async getCode(gameKey) {
     this.authToken = null;
     this.config = {};
+    this.gameKey = gameKey;
     this.hasCode = false;
     this.key = null;
     this.origin = DEVICE ?? Math.random() < 0.5 ? 'ios' : 'android';
-    debug('origin:', this.origin);
+
+    if (CLIENT[this.gameKey] !== undefined) {
+      this.authToken = CLIENT[this.gameKey].authToken;
+      this.origin = CLIENT[this.gameKey].origin;
+    }
+
+    debug('Origin:', this.origin);
 
     await GAMES[gameKey]({
       collect: this.collectFetch.bind(this),
@@ -615,8 +633,12 @@ async function main() {
         const code = await getPromoCode(gp, gameKeys[k]);
         console.info(code);
 
-        if (WITH_REINSTALL_TIME && k !== gameKeys.length - 1 && i !== KEYS - 1) {
-          await globalDelay((Math.floor(Math.random() * 11) + 20) * 1_000);
+        if (WITH_REINSTALL_TIME && !(k === gameKeys.length - 1 && i === KEYS - 1)) {
+          await globalDelay(
+            CLIENT_STRATEGY === 'keep'
+              ? 300_000
+              : (Math.floor(Math.random() * 11) + 20) * 1_000,
+          );
         }
       });
     }
