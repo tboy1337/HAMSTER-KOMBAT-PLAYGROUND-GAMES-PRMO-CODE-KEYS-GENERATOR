@@ -100,7 +100,7 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 This script is not available in Python :) \
 This is JS script that meant to be run with Node.js
 
-## How Long It Takes
+## How Long It Takes For One Key
 
 **Fastest Strategy**
 
@@ -120,7 +120,7 @@ BIKE ~ 5m
 **Realistic Strategy**
 
 ZOO ~ 11m \
-GANGS ~ N/A \
+GANGS ~ 20m \
 CAFE ~ 23m \
 TRIM ~ 8m \
 RACE ~ 7m \
@@ -136,8 +136,8 @@ BIKE ~ 13m
 
 ## How I Get App Token and Promo ID
 
-I run game on physical device, I actually play the game (so you don't need to). \
-While doing this I intercept and inspect requests with Wireshark looking for clues.
+I run games on both physical device and emulator. I actually play all games (so you don't have to). \
+While doing this I intercept and inspect requests with Burp NoPE looking for clues.
 
 ## Node.js Version
 
@@ -151,6 +151,11 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.6.1
+
+1. Added correct ios headers/client id generation for GANGS and CAFE game. \
+2. Adjusted realistic timing for GANGS game. \
 
 ### 1.6.0
 

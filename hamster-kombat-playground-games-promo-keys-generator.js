@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.6.0
+ * @version 1.6.1
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -43,15 +43,18 @@ const GAMES = {
   GANGS: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'b6de60a0-e030-48bb-a551-548372493523');
     setup('promo-id', 'c7821fa7-6632-482c-9635-2bd5798585f9');
+    setup('unity-version', '2022.3.41f1');
 
-    // todo check headers
-    // todo check unity version
-    // todo adjust realistic timing
+    if (origin === 'ios') {
+      setup('user-agent', 'UrbanCrimeLifeCityHustle/4 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.41f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
 
-    await login({ clientOrigin: origin, clientId: id('s5_h32') });
+    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 's5_UUID' : 's5_h32') });
 
     while (!instance.hasCode) {
-      await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 40_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 80_000 : 40_000);
       await event({ eventId: id('h16-h16'), eventOrigin: 'undefined' });
     }
 
@@ -60,11 +63,9 @@ const GAMES = {
   CAFE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
     setup('promo-id', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
+    setup('user-agent', 'Mozilla/5.0');
 
-    // todo check headers
-    // todo check unity version
-
-    await login({ clientId: id('h16'), clientOrigin: origin, clientVersion: '2.24.0' });
+    await login({ clientId: id(origin === 'ios' ? 'UUID' : 'h16'), clientOrigin: origin, clientVersion: '2.24.0' });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 90_000 : 20_000);
@@ -332,6 +333,9 @@ function globalId(type) {
     }
     case 's5_h32': {
       return `${randomString(5)}_${randomBytes(32)}`;
+    }
+    case 's5_UUID': {
+      return `${randomString(5)}_${uuidv4().toUpperCase()}`;
     }
     case 'ts': {
       return Date.now().toString();
