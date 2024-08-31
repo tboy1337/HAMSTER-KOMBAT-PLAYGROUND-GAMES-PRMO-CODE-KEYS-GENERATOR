@@ -154,8 +154,8 @@ In advance, thanks a lot!
 
 ### 1.6.1
 
-1. Added correct ios headers/client id generation for GANGS and CAFE game. \
-2. Adjusted realistic timing for GANGS game. \
+1. Added correct ios headers/client id generation for GANGS and CAFE game.
+2. Adjusted realistic timing for GANGS game.
 
 ### 1.6.0
 
