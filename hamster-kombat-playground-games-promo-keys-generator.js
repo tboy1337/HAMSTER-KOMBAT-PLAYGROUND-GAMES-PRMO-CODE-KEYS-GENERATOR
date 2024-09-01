@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.6.1
+ * @version 1.7.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -20,7 +20,7 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
-  ZOO: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  ZOO: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
     setup('promo-id', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
     setup('unity-version', '2022.3.15f1');
@@ -31,7 +31,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.15f1 (UnityWebRequest/1.0, libcurl/8.4.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientVersion: '1.2.8' });
+    await login({ clientId: id(_`ios ? UUID : h32`), clientOrigin: origin, clientVersion: _`ios ? 1.2.8 : 1.2.7` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 120_000 : 20_000);
@@ -40,18 +40,18 @@ const GAMES = {
 
     await collect();
   },
-  GANGS: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  GANGS: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'b6de60a0-e030-48bb-a551-548372493523');
     setup('promo-id', 'c7821fa7-6632-482c-9635-2bd5798585f9');
     setup('unity-version', '2022.3.41f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'UrbanCrimeLifeCityHustle/4 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'UrbanCrimeLifeCityHustle/0 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2022.3.41f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 's5_UUID' : 's5_h32') });
+    await login({ clientId: id(_`ios ? s5_UUID : s5_h32`), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 80_000 : 40_000);
@@ -60,12 +60,12 @@ const GAMES = {
 
     await collect();
   },
-  CAFE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  CAFE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
     setup('promo-id', 'bc0971b8-04df-4e72-8a3e-ec4dc663cd11');
     setup('user-agent', 'Mozilla/5.0');
 
-    await login({ clientId: id(origin === 'ios' ? 'UUID' : 'h16'), clientOrigin: origin, clientVersion: '2.24.0' });
+    await login({ clientId: id(_`ios ? UUID : h16`), clientOrigin: origin, clientVersion: '2.24.1' });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 90_000 : 20_000);
@@ -74,18 +74,18 @@ const GAMES = {
 
     await collect();
   },
-  TRIM: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  TRIM: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
     setup('promo-id', 'ef319a80-949a-492e-8ee0-424fb5fc20a6');
     setup('unity-version', '2021.3.17f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'MowandTrim/170 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'MowandTrim/197 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2021.3.17f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
+    await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
@@ -105,7 +105,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2020.3.18f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id('uuid') });
+    await login({ clientId: id('uuid'), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
@@ -114,18 +114,18 @@ const GAMES = {
 
     await collect();
   },
-  POLY: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  POLY: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
     setup('promo-id', '2aaf5aee-2cbc-47ec-8a3f-0962cc14bc71');
     setup('unity-version', '2021.3.39f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'Polysphere/147 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'Polysphere/159 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2021.3.39f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id('uuid'), clientVersion: '1.15.2' });
+    await login({ clientId: id('uuid'), clientOrigin: origin, clientVersion: _`ios ? 1.15.31 : 1.15.301` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 10_000 : 3_000);
@@ -134,18 +134,18 @@ const GAMES = {
 
     await collect();
   },
-  TWERK: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  TWERK: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '61308365-9d16-4040-8bb0-2f4a4c69074c');
     setup('promo-id', '61308365-9d16-4040-8bb0-2f4a4c69074c');
     setup('unity-version', '2021.3.15f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'Twerk/485 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'Twerk/491 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2021.3.15f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
+    await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 20_000);
@@ -154,7 +154,7 @@ const GAMES = {
 
     await collect();
   },
-  MERGE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  MERGE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '8d1cc2ad-e097-4b86-90ef-7a27e19fb833');
     setup('promo-id', 'dc128d28-c45b-411c-98ff-ac7726fbaea4');
 
@@ -164,16 +164,16 @@ const GAMES = {
       setup('user-agent', 'Mozilla/5.0 (Linux; Android 12; SM-S9110 Build/W528JS; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
+    await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
-      await event({ eventOrigin: 'undefined', eventId: id('uuid'), eventType: 'spend-energy' });
+      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'spend-energy' });
     }
 
     await collect();
   },
-  CLONE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  CLONE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '74ee0b5b-775e-4bee-974f-63e7f4d5bacb');
     setup('promo-id', 'fe693b26-b342-4159-8808-15e3ff7f8767');
     setup('unity-version', '2022.3.25f1');
@@ -184,27 +184,27 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.25f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientOrigin: origin });
+    await login({ clientId: id(_`ios ? UUID : h32`), clientOrigin: origin });
 
-    for (let i = 0; !instance.hasCode; i++) {
+    while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 120_000);
-      await event({ eventId: id('uuid'), eventType: 'MiniQuest', eventOrigin: 'undefined' });
+      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'MiniQuest' });
     }
 
     await collect();
   },
-  CUBE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  CUBE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'd1690a07-3780-4068-810f-9b5bbf2931b2');
     setup('promo-id', 'b4170868-cef0-424f-8eb9-be0622e8e8e3');
     setup('unity-version', '2022.3.20f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'ChainCube/3 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'ChainCube/4 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2022.3.20f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id('uuid'), clientVersion: '1.78.33' });
+    await login({ clientId: id('uuid'), clientOrigin: origin, clientVersion: _`ios ? 1.78.39 : 1.78.42` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 20_000);
@@ -213,7 +213,7 @@ const GAMES = {
 
     await collect();
   },
-  TRAIN: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  TRAIN: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '82647f43-3f87-402d-88dd-09a90025313f');
     setup('promo-id', 'c4480ac7-e178-4973-8061-9ed5b2e17954');
     setup('unity-version', '2022.3.20f1');
@@ -224,7 +224,7 @@ const GAMES = {
       setup('user-agent', 'UnityPlayer/2022.3.20f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientOrigin: origin, clientId: id(origin === 'ios' ? 'UUID' : 'h32'), clientVersion: '2.4.16' });
+    await login({ clientId: id(_`ios ? UUID : h32`), clientOrigin: origin, clientVersion: _`ios ? 2.4.16 : 2.6.4` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 600_000 : 120_000);
@@ -233,11 +233,11 @@ const GAMES = {
 
     await collect();
   },
-  BIKE: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
+  BIKE: async ({ _, collect, delay, event, id, instance, login, setup }) => {
     setup('app-token', 'd28721be-fd2d-4b45-869e-9f253b554e50');
     setup('promo-id', '43e35910-c168-4634-ad4f-52fd764a843f');
 
-    await login({ clientOrigin: origin === 'ios' ? 'ios' : 'deviceid', clientId: id(origin === 'ios' ? 'ts-d7' : 'ts-d19') });
+    await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: _`android ? deviceid : ios` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 50_000 : 20_000);
@@ -314,10 +314,10 @@ async function getPromoCode(gp, gameKey) {
  * Generates random string with provided type.
  * Types explanation:
  *   ts - timestamp.
- *   h5 - random string in hex format of length 5.
- *   s5 - random string of length 5.
+ *   h5 - lowercase version of random string in hex format of length 5.
+ *   s5 - lowercase version of random string of length 5.
  *   5d - random string of digits of length 5.
- *   uuid - string in UUID v4 format.
+ *   uuid - lowercase version of string in UUID v4 format.
  *   UUID - uppercase version of string in UUID v4 format.
  */
 function globalId(type) {
@@ -332,10 +332,10 @@ function globalId(type) {
       return randomBytes(32);
     }
     case 's5_h32': {
-      return `${randomString(5)}_${randomBytes(32)}`;
+      return `${randomString(5, 'abcdefghijklmnopqrstuvwxyz0123456789')}_${randomBytes(32)}`;
     }
     case 's5_UUID': {
-      return `${randomString(5)}_${uuidv4().toUpperCase()}`;
+      return `${randomString(5, 'abcdefghijklmnopqrstuvwxyz0123456789')}_${uuidv4().toUpperCase()}`;
     }
     case 'ts': {
       return Date.now().toString();
@@ -533,6 +533,25 @@ class GamePromo {
     debug('Origin:', this.origin);
 
     await GAMES[gameKey]({
+      _: (strings) => {
+        const template = strings[0];
+        const result = /^([\w.-]+)\s+\?\s+([\w.-]+)\s+:\s+([\w.-]+)$/.exec(template);
+
+        if (result === null) {
+          throw new Error(`Unable to parse template '${template}'`);
+        }
+
+        const [, condition, consequent, alternate] = result;
+
+        if (condition !== 'android' && condition !== 'ios') {
+          throw new Error(`Unable to parse template condition '${condition}' in '${template}'`);
+        }
+
+        const isAndroidAndroid = condition === 'android' && this.origin === 'android';
+        const isIosIos = condition === 'ios' && this.origin === 'ios';
+
+        return isAndroidAndroid || isIosIos ? consequent : alternate;
+      },
       collect: this.collectFetch.bind(this),
       delay: async (ms) => {
         const totalMs = Math.floor(ms * (Math.random() / 4 + 1));

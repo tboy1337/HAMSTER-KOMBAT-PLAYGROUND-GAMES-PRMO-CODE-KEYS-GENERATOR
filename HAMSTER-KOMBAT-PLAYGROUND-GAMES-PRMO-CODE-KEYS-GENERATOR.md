@@ -154,6 +154,11 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.7.0
+
+1. Updated all games to latest version.
+2. Added JS template function `_` for more compact design.
+
 ### 1.6.1
 
 1. Added correct ios headers/client id generation for GANGS and CAFE game.
