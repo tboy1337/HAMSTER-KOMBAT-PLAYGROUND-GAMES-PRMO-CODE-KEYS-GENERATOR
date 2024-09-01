@@ -74,6 +74,8 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 &emsp;Default: `unique`. \
 &emsp;Example: `--client-strategy=keep`.
 
+> NOTE: After each key you have 5 minutes delay to redeem the code inside of HamsterKombat, if you fail to do so it will generate same key over and over again.
+
 `--device`, `-d` - Force script to use only one specific device. \
 &emsp;Values: `android`, `ios`. \
 &emsp;Default: random device selected for each key. \
