@@ -154,6 +154,10 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.7.1
+
+1. Added expiration for CAFE and GANGS.
+
 ### 1.7.0
 
 1. Updated all games to latest version.

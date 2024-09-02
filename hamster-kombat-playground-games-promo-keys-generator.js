@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.7.0
+ * @version 1.7.1
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -250,7 +250,9 @@ const GAMES = {
 
 const GAMES_EXPIRATIONS = {
   BIKE: new Date('2024-08-30T07:30:00.000Z'),
+  CAFE: new Date('2024-09-02T07:30:00.000Z'),
   CLONE: new Date('2024-08-26T00:00:00.000Z'),
+  GANGS: new Date('2024-09-02T07:30:00.000Z'),
   RACE: new Date('2024-08-30T07:30:00.000Z'),
 };
 
