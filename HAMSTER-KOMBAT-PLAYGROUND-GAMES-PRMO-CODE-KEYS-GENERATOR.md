@@ -154,6 +154,15 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.8.0
+
+1. Added Game Promo API versioning.
+2. Introduced auth functionality for different vendors starting with `cedar.games` for iOS.
+3. Added FLUF game.
+4. Added half-finished TILE game (iOS only).
+
+> NOTE: There's no way to generate 8 keys for FLUF right now, you can generate another 4 keys with `--only=FLUF`
+
 ### 1.7.1
 
 1. Added expiration for CAFE and GANGS.

@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.7.1
+ * @version 1.8.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -20,6 +20,54 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
+  FLUF: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', '112887b0-a8af-4eb2-ac63-d82df78283d9');
+    setup('promo-id', '112887b0-a8af-4eb2-ac63-d82df78283d9');
+    setup('unity-version', '2022.3.27f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'FluffCrusade/236 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.27f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id('uuid'), clientOrigin: 'deviceid' });
+    await getClient(1);
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 800_000 : 120_000);
+      await event(1, { eventId: id('uuid'), eventOrigin: 'undefined' });
+    }
+
+    await collect(1);
+  },
+  TILE: async ({ _, auth, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', 'e68b39d2-4880-4a31-b3aa-0393e7df10c7');
+    setup('promo-id', 'e68b39d2-4880-4a31-b3aa-0393e7df10c7');
+    setup('unity-version', '2020.3.48f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'TileTrio/3 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2020.3.48f1 (UnityWebRequest/1.0, libcurl/7.84.0-DEV)');
+    }
+
+    const clientId = await auth('cedar.games');
+
+    await login(1, { clientId, clientOrigin: 'deviceid', clientVersion: '12.4.3' });
+    await getClient(1);
+
+    if (TIMING_STRATEGY === 'realistic') {
+      await delay(600_000);
+    }
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
+      await event(1, { eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'gt_progress' });
+    }
+
+    await collect(1);
+  },
   ZOO: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
     setup('promo-id', 'b2436c89-e0aa-4aed-8046-9b0515e1c46b');
@@ -278,6 +326,44 @@ async function globalDelay(ms) {
   });
 }
 
+async function globalFetch(url, options, retry = 0) {
+  debug(url, options);
+  let res;
+
+  try {
+    res = await fetch(url, options);
+  } catch (err) {
+    if (retry < SERVER_ERROR_RETRIES) {
+      console.error('Received network error, will retry after cooldown period.');
+      debug(err);
+
+      await globalDelay(SERVER_ERROR_COOLDOWN);
+      return globalFetch(url, options, retry + 1);
+    }
+
+    throw err;
+  }
+
+  if (!res.ok) {
+    if (DEBUG) {
+      const text = await res.text();
+      debug(text);
+    }
+
+    if (retry < SERVER_ERROR_RETRIES) {
+      console.error('Received internal server error, will retry after cooldown period.');
+      await globalDelay(SERVER_ERROR_COOLDOWN);
+      return globalFetch(url, options, retry + 1);
+    }
+
+    throw new Error(`${res.status} ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  debug(data);
+  return data;
+}
+
 function randomBytes(len) {
   return Array.from(
     crypto.getRandomValues(new Uint8Array(len / 2)),
@@ -409,83 +495,102 @@ class GamePromo {
     this.origin = null;
   }
 
-  async fetchApi(path, body = null, retry = 0) {
-    const headers = {
-      accept: '*/*',
-      'accept-encoding': 'deflate, gzip',
-      'content-type': 'application/json',
-    };
+  async fetchApi(version, path, body = null) {
+    const headers = {};
 
     if (this.authToken !== null) {
-      headers.authorization = `Bearer ${this.authToken}`;
+      headers['Authorization'] = `Bearer ${this.authToken}`;
     }
 
     if (this.config['user-agent'] !== undefined) {
-      headers['user-agent'] = this.config['user-agent'];
+      headers['User-Agent'] = this.config['user-agent'];
     }
 
     if (this.config['unity-version'] !== undefined) {
-      headers['x-unity-version'] = this.config['unity-version'];
+      headers['X-Unity-Version'] = this.config['unity-version'];
     }
 
-    const url = `https://api.gamepromo.io${path}`;
+    const versionPath = version === 0 ? '' : `/${version.toString()}`;
+    const url = `https://api.gamepromo.io/promo${versionPath}${path}`;
+    const bodyText = JSON.stringify(body);
 
-    const options = {
+    return globalFetch(url, {
       method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    };
-
-    debug(url, options);
-    let res;
-
-    try {
-      res = await fetch(url, options);
-    } catch (err) {
-      if (retry < SERVER_ERROR_RETRIES) {
-        console.error('Received network error, will retry after cooldown period.');
-        debug(err);
-
-        await globalDelay(SERVER_ERROR_COOLDOWN);
-        return this.fetchApi(path, body, retry + 1);
-      }
-
-      throw err;
-    }
-
-    if (!res.ok) {
-      if (DEBUG) {
-        const text = await res.text();
-        debug(text);
-      }
-
-      if (retry < SERVER_ERROR_RETRIES) {
-        console.error('Received internal server error, will retry after cooldown period.');
-        await globalDelay(SERVER_ERROR_COOLDOWN);
-        return this.fetchApi(path, body, retry + 1);
-      }
-
-      throw new Error(`${res.status} ${res.statusText}`);
-    }
-
-    const data = await res.json();
-    debug(data);
-    return data;
+      headers: {
+        'Accept': '*/*',
+        'Accept-Encoding': 'deflate, gzip',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Content-Length': bodyText.length,
+        'Content-Type': 'application/json',
+        ...headers,
+      },
+      body: bodyText,
+    });
   }
 
-  async configSet(key, value) {
+  async setConfig(key, value) {
     this.config[key] = value;
   }
 
-  async loginFetch(data) {
+  async authFetch(vendor) {
+    if (CLIENT_STRATEGY === 'keep' && CLIENT[this.gameKey] !== undefined) {
+      debug('Re-using auth');
+      return;
+    }
+
+    switch (vendor) {
+      case 'cedar.games': {
+        const body = new URLSearchParams({
+          method: '_post',
+          data: JSON.stringify({
+            'deviceId': globalId('uuid'),
+            'socialUserId': '',
+            'network': 'fb',
+            'UTCOffset': '3',
+            'version': '12.4.3',
+            'clientMergeAware': true,
+            'ads_id': '00000000-0000-0000-0000-000000000000',
+            'apple_id': '',
+            'device_model': 'iPhone11,6',
+            'memory': '3754',
+            'os': 'iOS 17.6.1',
+            'screen_width': '1242',
+            'screen_height': '2688',
+            'screen_size': '6.465209',
+          }),
+        }).toString();
+
+        const res = await globalFetch('https://app-t2d.cedar.games/mobile/auth', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'en-US,en;q=0.9',
+            'Content-Length': body.length,
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'User-Agent': this.config['user-agent'],
+            'X-Unity-Version': this.config['unity-version'],
+          },
+          body: body,
+        });
+
+        return res.userId.toString();
+      }
+    }
+  }
+
+  async loginFetch(versionOrData, data) {
     if (CLIENT_STRATEGY === 'keep' && CLIENT[this.gameKey] !== undefined) {
       debug('Re-using auth token');
       return;
     }
 
-    const res = await this.fetchApi('/promo/login-client', {
+    const version = typeof versionOrData === 'number' ? versionOrData : 0;
+    const finalData = typeof versionOrData !== 'number' ? versionOrData : data;
+
+    const res = await this.fetchApi(version, '/login-client', {
       appToken: this.config['app-token'],
-      ...data,
+      ...finalData,
     });
 
     if (typeof res.clientToken === 'string' && res.clientToken !== '') {
@@ -498,19 +603,28 @@ class GamePromo {
     }
   }
 
-  async eventFetch(data) {
+  async getClientFetch(version) {
+    const promoId = this.config['promo-id'];
+    await this.fetchApi(version, '/get-client', { promoId });
+  }
+
+  async eventFetch(versionOrData, data) {
+    const version = typeof versionOrData === 'number' ? versionOrData : 0;
+    const finalData = typeof versionOrData !== 'number' ? versionOrData : data;
     const promoId = this.config['promo-id'];
     // on ios promoId is sent as first property, on android it's sent last
-    const payload = this.origin === 'ios' ? { promoId, ...data } : { ...data, promoId };
-    const res = await this.fetchApi('/promo/register-event', payload);
+    const payload = this.origin === 'ios' ? { promoId, ...finalData } : { ...finalData, promoId };
+    const res = await this.fetchApi(version, '/register-event', payload);
 
     if (res.hasCode === true) {
       this.hasCode = true;
     }
   }
 
-  async collectFetch() {
-    const res = await this.fetchApi('/promo/create-code', {
+  async collectFetch(versionOrNull = null) {
+    const version = versionOrNull ?? 0;
+
+    const res = await this.fetchApi(version, '/create-code', {
       promoId: this.config['promo-id'],
     });
 
@@ -535,25 +649,7 @@ class GamePromo {
     debug('Origin:', this.origin);
 
     await GAMES[gameKey]({
-      _: (strings) => {
-        const template = strings[0];
-        const result = /^([\w.-]+)\s+\?\s+([\w.-]+)\s+:\s+([\w.-]+)$/.exec(template);
-
-        if (result === null) {
-          throw new Error(`Unable to parse template '${template}'`);
-        }
-
-        const [, condition, consequent, alternate] = result;
-
-        if (condition !== 'android' && condition !== 'ios') {
-          throw new Error(`Unable to parse template condition '${condition}' in '${template}'`);
-        }
-
-        const isAndroidAndroid = condition === 'android' && this.origin === 'android';
-        const isIosIos = condition === 'ios' && this.origin === 'ios';
-
-        return isAndroidAndroid || isIosIos ? consequent : alternate;
-      },
+      _: this.preprocess.bind(this),
       collect: this.collectFetch.bind(this),
       delay: async (ms) => {
         const totalMs = Math.floor(ms * (Math.random() / 4 + 1));
@@ -561,10 +657,12 @@ class GamePromo {
       },
       id: globalId,
       instance: this,
+      auth: this.authFetch.bind(this),
       login: this.loginFetch.bind(this),
+      getClient: this.getClientFetch.bind(this),
       event: this.eventFetch.bind(this),
       origin: this.origin,
-      setup: this.configSet.bind(this),
+      setup: this.setConfig.bind(this),
     });
 
     if (this.key === null) {
@@ -572,6 +670,26 @@ class GamePromo {
     }
 
     return this.key;
+  }
+
+  preprocess(strings) {
+    const template = strings[0];
+    const result = /^([\w.-]+)\s+\?\s+([\w.-]+)\s+:\s+([\w.-]+)$/.exec(template);
+
+    if (result === null) {
+      throw new Error(`Unable to preprocess '${template}'`);
+    }
+
+    const [, condition, consequent, alternate] = result;
+
+    if (condition !== 'android' && condition !== 'ios') {
+      throw new Error(`Unable to preprocess condition '${condition}' in '${template}'`);
+    }
+
+    const isAndroidAndroid = condition === 'android' && this.origin === 'android';
+    const isIosIos = condition === 'ios' && this.origin === 'ios';
+
+    return isAndroidAndroid || isIosIos ? consequent : alternate;
   }
 }
 
