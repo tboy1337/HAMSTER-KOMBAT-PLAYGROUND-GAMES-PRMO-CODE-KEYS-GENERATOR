@@ -74,7 +74,7 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 &emsp;Default: `unique`. \
 &emsp;Example: `--client-strategy=keep`.
 
-> NOTE: After each key you have 5 minutes delay to redeem the code inside of HamsterKombat, if you fail to do so it will generate same key over and over again.
+> NOTE: After each key you have 5 minutes delay to redeem the code inside HamsterKombat, if you fail to do so it will generate same key over and over again.
 
 `--device`, `-d` - Force script to use only one specific device. \
 &emsp;Values: `android`, `ios`. \
@@ -106,6 +106,8 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+FLUF ~ 3m \
+TILE ~ 2m \
 ZOO ~ 2m \
 GANGS ~ 9m \
 CAFE ~ 4m \
@@ -121,6 +123,8 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+FLUF ~ 13m \
+TILE ~ 13m \
 ZOO ~ 11m \
 GANGS ~ 20m \
 CAFE ~ 23m \
@@ -153,6 +157,12 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.8.1
+
+1. Fully finalized TILE game.
+2. Changed realistic timing for FLUF game.
+3. Disabled getting keys for TILE game as it's not in playground anymore.
 
 ### 1.8.0
 

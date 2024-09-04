@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.8.0
+ * @version 1.8.1
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -35,7 +35,7 @@ const GAMES = {
     await getClient(1);
 
     while (!instance.hasCode) {
-      await delay(TIMING_STRATEGY === 'realistic' ? 800_000 : 120_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 720_000 : 120_000);
       await event(1, { eventId: id('uuid'), eventOrigin: 'undefined' });
     }
 
@@ -54,7 +54,7 @@ const GAMES = {
 
     const clientId = await auth('cedar.games');
 
-    await login(1, { clientId, clientOrigin: 'deviceid', clientVersion: '12.4.3' });
+    await login(1, { clientId, clientOrigin: 'deviceid', clientVersion: _`ios ? 12.4.3 : 12.4.57` });
     await getClient(1);
 
     if (TIMING_STRATEGY === 'realistic') {
@@ -62,7 +62,7 @@ const GAMES = {
     }
 
     while (!instance.hasCode) {
-      await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 20_000);
       await event(1, { eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'gt_progress' });
     }
 
@@ -302,6 +302,7 @@ const GAMES_EXPIRATIONS = {
   CLONE: new Date('2024-08-26T00:00:00.000Z'),
   GANGS: new Date('2024-09-02T07:30:00.000Z'),
   RACE: new Date('2024-08-30T07:30:00.000Z'),
+  TILE: new Date('2024-09-04T07:30:00.000Z'),
 };
 
 const CLIENT = {};
@@ -405,8 +406,9 @@ async function getPromoCode(gp, gameKey) {
  *   h5 - lowercase version of random string in hex format of length 5.
  *   s5 - lowercase version of random string of length 5.
  *   5d - random string of digits of length 5.
- *   uuid - lowercase version of string in UUID v4 format.
  *   UUID - uppercase version of string in UUID v4 format.
+ *   uuid - lowercase version of string in UUID v4 format.
+ *   uuid-0 - lowercase version of NULL value of UUID v4 format.
  */
 function globalId(type) {
   switch (type) {
@@ -434,11 +436,14 @@ function globalId(type) {
     case 'ts-d19': {
       return `${Date.now()}-${randomDigits(19)}`;
     }
+    case 'UUID': {
+      return uuidv4().toUpperCase();
+    }
     case 'uuid': {
       return uuidv4();
     }
-    case 'UUID': {
-      return uuidv4().toUpperCase();
+    case 'uuid-0': {
+      return '00000000-0000-0000-0000-000000000000';
     }
     default: {
       throw new Error(`Tried generating unknown id '${type}'.`);
@@ -495,6 +500,26 @@ class GamePromo {
     this.origin = null;
   }
 
+  _(strings, ...values) {
+    const template = String.raw({ raw: strings }, ...values);
+    const result = /^([\w ./(),-]+)\s+\?\s+([\w ./(),-]+)\s+:\s+([\w ./(),-]+)$/.exec(template);
+
+    if (result === null) {
+      throw new Error(`Unable to preprocess '${template}'`);
+    }
+
+    const [, condition, consequent, alternate] = result;
+
+    if (condition !== 'android' && condition !== 'ios') {
+      throw new Error(`Unable to preprocess condition '${condition}' in '${template}'`);
+    }
+
+    const isAndroidAndroid = condition === 'android' && this.origin === 'android';
+    const isIosIos = condition === 'ios' && this.origin === 'ios';
+
+    return isAndroidAndroid || isIosIos ? consequent : alternate;
+  }
+
   async fetchApi(version, path, body = null) {
     const headers = {};
 
@@ -520,7 +545,7 @@ class GamePromo {
         'Accept': '*/*',
         'Accept-Encoding': 'deflate, gzip',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Content-Length': bodyText.length,
+        'Content-Length': bodyText.length.toString(),
         'Content-Type': 'application/json',
         ...headers,
       },
@@ -547,16 +572,16 @@ class GamePromo {
             'socialUserId': '',
             'network': 'fb',
             'UTCOffset': '3',
-            'version': '12.4.3',
+            'version': this._`ios ? 12.4.3 : 12.4.57`,
             'clientMergeAware': true,
-            'ads_id': '00000000-0000-0000-0000-000000000000',
-            'apple_id': '',
-            'device_model': 'iPhone11,6',
-            'memory': '3754',
-            'os': 'iOS 17.6.1',
-            'screen_width': '1242',
-            'screen_height': '2688',
-            'screen_size': '6.465209',
+            'ads_id': this._`ios ? ${globalId('uuid-0')} : ${globalId('uuid')}`,
+            ...(this.origin === 'ios' ? { 'apple_id': '' } : { 'android_id': globalId('h16') }),
+            'device_model': this._`ios ? iPhone11,6 : Samsung SM-S9110`,
+            'memory': this._`ios ? 3754 : 2999`,
+            'os': this._`ios ? iOS 17.6.1 : Android OS 12 / API-32 (W528JS/228)`,
+            'screen_width': this._`ios ? 1242 : 1080`,
+            'screen_height': this._`ios ? 2688 : 1920`,
+            'screen_size': this._`ios ? 6.465209 : 6.119187`,
           }),
         }).toString();
 
@@ -566,7 +591,7 @@ class GamePromo {
             'Accept': 'application/json',
             'Accept-Encoding': 'gzip, deflate, br',
             'Accept-Language': 'en-US,en;q=0.9',
-            'Content-Length': body.length,
+            'Content-Length': body.length.toString(),
             'Content-Type': 'application/x-www-form-urlencoded',
             'User-Agent': this.config['user-agent'],
             'X-Unity-Version': this.config['unity-version'],
@@ -649,7 +674,7 @@ class GamePromo {
     debug('Origin:', this.origin);
 
     await GAMES[gameKey]({
-      _: this.preprocess.bind(this),
+      _: this._.bind(this),
       collect: this.collectFetch.bind(this),
       delay: async (ms) => {
         const totalMs = Math.floor(ms * (Math.random() / 4 + 1));
@@ -670,26 +695,6 @@ class GamePromo {
     }
 
     return this.key;
-  }
-
-  preprocess(strings) {
-    const template = strings[0];
-    const result = /^([\w.-]+)\s+\?\s+([\w.-]+)\s+:\s+([\w.-]+)$/.exec(template);
-
-    if (result === null) {
-      throw new Error(`Unable to preprocess '${template}'`);
-    }
-
-    const [, condition, consequent, alternate] = result;
-
-    if (condition !== 'android' && condition !== 'ios') {
-      throw new Error(`Unable to preprocess condition '${condition}' in '${template}'`);
-    }
-
-    const isAndroidAndroid = condition === 'android' && this.origin === 'android';
-    const isIosIos = condition === 'ios' && this.origin === 'ios';
-
-    return isAndroidAndroid || isIosIos ? consequent : alternate;
   }
 }
 
