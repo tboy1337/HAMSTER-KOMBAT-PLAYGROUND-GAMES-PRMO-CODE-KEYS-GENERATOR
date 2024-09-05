@@ -64,10 +64,14 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 
 ## Script Arguments
 
+### timing-strategy
+
 `--timing-strategy` - What timing strategy to use. Realistic - takes longer but uses delays of real users, fastest - takes faster but has a great risk of your keys being removed during Airdrop. \
 &emsp;Values: `realistice`, `fastest`. \
 &emsp;Default: `realistic`. \
 &emsp;Example: `--timing-strategy=fastest`.
+
+### client-strategy
 
 `--client-strategy` - What client strategy to use. Unique - generates unique client id for every new key, keep - generates only one client id per game and re-uses it for every key. \
 &emsp;Values: `unique`, `keep`. \
@@ -76,26 +80,36 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 
 > NOTE: After each key you have 5 minutes delay to redeem the code inside HamsterKombat, if you fail to do so it will generate same key over and over again.
 
+### device
+
 `--device`, `-d` - Force script to use only one specific device. \
 &emsp;Values: `android`, `ios`. \
 &emsp;Default: random device selected for each key. \
 &emsp;Example: `--device=ios`, `-d=android`.
 
+### exclude
+
 `--exclude`, `-e` - Game names to exclude. \
 &emsp;Default: empty string. \
 &emsp;Example: `--exclude="BIKE, MERGE"`, `-e=BIKE`.
 
-`--keys`, `-k` - Number of keys to generate for each game. \
-&emsp;Default: `4`. \
-&emsp;Example: `--keys=4`, `-k=1`.
+### keys
+
+`--keys`, `-k` - Number of keys to generate for each game. You can provide number of keys for specific games: `BIKE:1` - this will generate 1 key for `BIKE` game and 0 keys for all other games. You can add a fallback `4,BIKE:1` - this will generate 1 key for `BIKE` game and 4 keys for all other games. \
+&emsp;Default: `4,FLUF:8`. \
+&emsp;Example: `--keys=MERGE:3`, `--keys="4,BIKE:1,TRIM:2"`, `--keys=4`, `-k=1`.
+
+### only
+
+`--only`, `-o` - Script will process only names you provided with this option. This option has higher precedence and allows running even expired games. Option's games order is taken into account when generating keys. \
+&emsp;Default: all games. \
+&emsp;Example: `--only="BIKE, MERGE"`, `-o=BIKE`.
+
+### debug
 
 `--debug` - Whether to show debug data. \
 &emsp;Default: `false`. \
 &emsp;Example: `--debug=true`.
-
-`--only`, `-o` - Script will process only names you provided with this option. \
-&emsp;Default: all games. \
-&emsp;Example: `--only="BIKE, MERGE"`, `-o=BIKE`.
 
 ### With Python (N/A)
 
@@ -106,7 +120,8 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
-FLUF ~ 3m \
+STONE ~ 2m \
+FLUF ~ 2m \
 TILE ~ 2m \
 ZOO ~ 2m \
 GANGS ~ 9m \
@@ -123,8 +138,9 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
-FLUF ~ 13m \
-TILE ~ 13m \
+STONE ~ N/A \
+FLUF ~ 8m \
+TILE ~ 10m \
 ZOO ~ 11m \
 GANGS ~ 20m \
 CAFE ~ 23m \
@@ -157,6 +173,15 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.9.0
+
+1. Added STONE game (android only).
+2. Added second user-agent variant for android MERGE game.
+3. Fixed bug with setting device option.
+4. Ability to specify custom number of keys with new keys syntax: `--keys="4,FLUF:8"`.
+5. Option `--only` now allows to run even expired games.
+6. Option `--only` games order is taken into account when generating keys.
 
 ### 1.8.2
 

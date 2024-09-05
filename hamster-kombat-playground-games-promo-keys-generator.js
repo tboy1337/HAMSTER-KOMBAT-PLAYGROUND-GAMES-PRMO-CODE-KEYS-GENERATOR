@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.8.2
+ * @version 1.9.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -9,10 +9,11 @@ const CLIENT_STRATEGY = parseArg(['client-strategy'], (it) => (['keep', 'unique'
 const TIMING_STRATEGY = parseArg(['timing-strategy'], (it) => (['fastest', 'realistic'].includes(it) ? it : null), 'realistic');
 const SERVER_ERROR_COOLDOWN = 300_000;
 const SERVER_ERROR_RETRIES = 3;
+const WITH_RANDOMIZED_DELAYS = true;
 const WITH_REINSTALL_TIME = true;
 const DEVICE = parseArg(['d', 'device'], (it) => (['android', 'ios'].includes(it) ? it : null));
 const EXCLUDE = parseArg(['e', 'exclude'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
-const KEYS = parseArg(['k', 'keys'], (it) => Number.parseInt(it, 10) || null, 4);
+const KEYS = parseArg(['k', 'keys'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), ['4', 'FLUF:8']);
 const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
 
 //
@@ -20,6 +21,26 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
+  STONE: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', '04ebd6de-69b7-43d1-9c4b-04a6ca3305af');
+    setup('promo-id', '04ebd6de-69b7-43d1-9c4b-04a6ca3305af');
+
+    if (Math.random() < 0.5) {
+      setup('user-agent', 'Dalvik/2.1.0 (Linux; U; Android 12; SM-S9110 Build/W528JS)');
+    } else {
+      setup('user-agent', 'Dalvik/2.1.0 (Linux; U; Android 13; 24030PN60G Build/TQ3A.230901.001)');
+    }
+
+    await login(1, { clientId: id('H16'), clientOrigin: origin, clientVersion: '1.113.113' });
+    await getClient(1);
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 200_000 : 10_000);
+      await event(1, { eventId: id('d7'), eventOrigin: 'undefined' });
+    }
+
+    await collect(1);
+  },
   FLUF: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
     setup('app-token', '112887b0-a8af-4eb2-ac63-d82df78283d9');
     setup('promo-id', '112887b0-a8af-4eb2-ac63-d82df78283d9');
@@ -209,7 +230,11 @@ const GAMES = {
     if (origin === 'ios') {
       setup('user-agent', 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148');
     } else {
-      setup('user-agent', 'Mozilla/5.0 (Linux; Android 12; SM-S9110 Build/W528JS; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36');
+      if (Math.random() < 0.5) {
+        setup('user-agent', 'Mozilla/5.0 (Linux; Android 12; SM-S9110 Build/W528JS; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/95.0.4638.74 Mobile Safari/537.36');
+      } else {
+        setup('user-agent', 'Mozilla/5.0 (Linux; Android 13; 24030PN60G Build/TQ3A.230901.001; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/117.0.0.0 Mobile Safari/537.36');
+      }
     }
 
     await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
@@ -411,6 +436,12 @@ async function getPromoCode(gp, gameKey) {
  */
 function globalId(type) {
   switch (type) {
+    case 'd7': {
+      return randomDigits(7);
+    }
+    case 'H16': {
+      return randomBytes(16).toUpperCase();
+    }
     case 'h16': {
       return randomBytes(16);
     }
@@ -483,6 +514,42 @@ function filterExpired(gameKey) {
   }
 
   return GAMES_EXPIRATIONS[gameKey] > new Date();
+}
+
+function filterNonExisting(gameKey) {
+  return Object.prototype.hasOwnProperty.call(GAMES, gameKey);
+}
+
+function keysTotal(gameKey) {
+  let fallbackKey = null;
+
+  for (const key of KEYS) {
+    if (!key.includes(':') && fallbackKey === null) {
+      fallbackKey = key;
+    }
+
+    if (key.startsWith(`${gameKey}:`)) {
+      const num = Number.parseInt(key.slice(gameKey.length + 1), 10);
+
+      if (isNaN(num) || num < 0) {
+        throw new Error(`Key '${key}' has invalid syntax, try with '4,FLUF:8'.`);
+      }
+
+      return num;
+    }
+  }
+
+  if (fallbackKey !== null) {
+    const num = Number.parseInt(fallbackKey, 10);
+
+    if (isNaN(num) || num < 0) {
+      throw new Error(`Key '${fallbackKey}' has invalid syntax, try with '4,FLUF:8'.`);
+    }
+
+    return num;
+  }
+
+  return 0;
 }
 
 //
@@ -663,7 +730,7 @@ class GamePromo {
     this.gameKey = gameKey;
     this.hasCode = false;
     this.key = null;
-    this.origin = DEVICE ?? Math.random() < 0.5 ? 'ios' : 'android';
+    this.origin = DEVICE !== null ? DEVICE : Math.random() < 0.5 ? 'ios' : 'android';
 
     if (CLIENT[this.gameKey] !== undefined) {
       this.authToken = CLIENT[this.gameKey].authToken;
@@ -676,8 +743,12 @@ class GamePromo {
       _: this._.bind(this),
       collect: this.collectFetch.bind(this),
       delay: async (ms) => {
-        const totalMs = Math.floor(ms * (Math.random() / 4 + 1));
-        await globalDelay(totalMs);
+        if (WITH_RANDOMIZED_DELAYS) {
+          const randomMs = Math.floor(ms * (Math.random() / 4 + 1));
+          await globalDelay(randomMs);
+        } else {
+          await globalDelay(ms);
+        }
       },
       id: globalId,
       instance: this,
@@ -764,10 +835,9 @@ class Queue {
 //
 
 async function main() {
-  const gameKeys = Object.keys(GAMES)
-    .filter((it) => !EXCLUDE.includes(it))
-    .filter((it) => ONLY.length === 0 || ONLY.includes(it))
-    .filter(filterExpired);
+  const gameKeys = ONLY.length === 0
+    ? Object.keys(GAMES).filter((it) => !EXCLUDE.includes(it)).filter(filterExpired)
+    : ONLY.filter(filterNonExisting);
 
   debug('Game keys:', gameKeys);
 
@@ -775,12 +845,15 @@ async function main() {
   const queue = new Queue();
 
   for (let k = 0; k < gameKeys.length; k++) {
-    for (let i = 0; i < KEYS; i++) {
+    const gameKey = gameKeys[k];
+    const keys = keysTotal(gameKey);
+
+    for (let i = 0; i < keys; i++) {
       queue.push(async () => {
-        const code = await getPromoCode(gp, gameKeys[k]);
+        const code = await getPromoCode(gp, gameKey);
         console.info(code);
 
-        if (WITH_REINSTALL_TIME && !(k === gameKeys.length - 1 && i === KEYS - 1)) {
+        if (WITH_REINSTALL_TIME && !(k === gameKeys.length - 1 && i === keys - 1)) {
           await globalDelay(
             CLIENT_STRATEGY === 'keep'
               ? 300_000
