@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.8.1
+ * @version 1.8.2
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -26,7 +26,7 @@ const GAMES = {
     setup('unity-version', '2022.3.27f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'FluffCrusade/236 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'FluffCrusade/313 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2022.3.27f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
@@ -35,7 +35,7 @@ const GAMES = {
     await getClient(1);
 
     while (!instance.hasCode) {
-      await delay(TIMING_STRATEGY === 'realistic' ? 720_000 : 120_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 420_000 : 120_000);
       await event(1, { eventId: id('uuid'), eventOrigin: 'undefined' });
     }
 
@@ -58,7 +58,7 @@ const GAMES = {
     await getClient(1);
 
     if (TIMING_STRATEGY === 'realistic') {
-      await delay(600_000);
+      await delay(420_000);
     }
 
     while (!instance.hasCode) {
@@ -302,7 +302,6 @@ const GAMES_EXPIRATIONS = {
   CLONE: new Date('2024-08-26T00:00:00.000Z'),
   GANGS: new Date('2024-09-02T07:30:00.000Z'),
   RACE: new Date('2024-08-30T07:30:00.000Z'),
-  TILE: new Date('2024-09-04T07:30:00.000Z'),
 };
 
 const CLIENT = {};

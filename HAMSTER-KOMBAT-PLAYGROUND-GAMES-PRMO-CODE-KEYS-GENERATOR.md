@@ -158,6 +158,12 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.8.2
+
+1. Enabled back TILE game.
+2. Re-tested and adjusted timings for TILE game.
+3. Updated FLUF realistic timings, I was able to get keys faster by watching ad that speeds up the game.
+
 ### 1.8.1
 
 1. Fully finalized TILE game.
