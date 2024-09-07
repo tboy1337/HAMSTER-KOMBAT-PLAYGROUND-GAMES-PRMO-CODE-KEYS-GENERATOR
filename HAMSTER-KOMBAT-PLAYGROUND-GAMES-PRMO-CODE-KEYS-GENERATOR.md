@@ -138,7 +138,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
-STONE ~ N/A \
+STONE ~ 8m \
 FLUF ~ 8m \
 TILE ~ 10m \
 ZOO ~ 11m \
@@ -173,6 +173,11 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.9.1
+
+1. Updated realistic timings for STONE game.
+2. Send requests only as android device for STONE game.
 
 ### 1.9.0
 

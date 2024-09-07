@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.9.0
+ * @version 1.9.1
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -21,7 +21,7 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
-  STONE: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+  STONE: async ({ collect, delay, event, getClient, id, instance, login, setup }) => {
     setup('app-token', '04ebd6de-69b7-43d1-9c4b-04a6ca3305af');
     setup('promo-id', '04ebd6de-69b7-43d1-9c4b-04a6ca3305af');
 
@@ -31,17 +31,21 @@ const GAMES = {
       setup('user-agent', 'Dalvik/2.1.0 (Linux; U; Android 13; 24030PN60G Build/TQ3A.230901.001)');
     }
 
-    await login(1, { clientId: id('H16'), clientOrigin: origin, clientVersion: '1.113.113' });
+    await login(1, { clientId: id('H16'), clientOrigin: 'android', clientVersion: '1.113.113' });
     await getClient(1);
 
+    if (TIMING_STRATEGY === 'realistic') {
+      await delay(210_000);
+    }
+
     while (!instance.hasCode) {
-      await delay(TIMING_STRATEGY === 'realistic' ? 200_000 : 10_000);
+      await delay(TIMING_STRATEGY === 'realistic' ? 20_000 : 10_000);
       await event(1, { eventId: id('d7'), eventOrigin: 'undefined' });
     }
 
     await collect(1);
   },
-  FLUF: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+  FLUF: async ({ collect, delay, event, getClient, id, instance, login, origin, setup }) => {
     setup('app-token', '112887b0-a8af-4eb2-ac63-d82df78283d9');
     setup('promo-id', '112887b0-a8af-4eb2-ac63-d82df78283d9');
     setup('unity-version', '2022.3.27f1');
@@ -662,12 +666,14 @@ class GamePromo {
             'User-Agent': this.config['user-agent'],
             'X-Unity-Version': this.config['unity-version'],
           },
-          body: body,
+          body,
         });
 
         return res.userId.toString();
       }
     }
+
+    throw new Error('Unknown auth provider.');
   }
 
   async loginFetch(versionOrData, data) {
