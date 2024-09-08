@@ -174,6 +174,10 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.9.2
+
+1. Added iOS device support for STONE game.
+
 ### 1.9.1
 
 1. Updated realistic timings for STONE game.
