@@ -120,6 +120,7 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+BOUNC ~ 2m \
 STONE ~ 2m \
 FLUF ~ 2m \
 TILE ~ 2m \
@@ -138,6 +139,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+BOUNC ~ 7m \
 STONE ~ 8m \
 FLUF ~ 8m \
 TILE ~ 10m \
@@ -173,6 +175,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.10.0
+
+1. Added BOUNC game.
 
 ### 1.9.2
 
