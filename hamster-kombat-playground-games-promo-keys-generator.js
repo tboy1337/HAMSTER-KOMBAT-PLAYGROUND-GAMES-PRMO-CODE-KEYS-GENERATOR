@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.10.0
+ * @version 1.11.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -55,7 +55,7 @@ const GAMES = {
       }
     }
 
-    await login(1, { clientId: id('H16'), clientOrigin: origin, clientVersion: _`ios ? 1.113.2 : 1.113.113` });
+    await login(1, { clientId: id('H16'), clientOrigin: origin, clientVersion: _`ios ? 1.113.2 : 1.113.114` });
     await getClient(1);
 
     if (TIMING_STRATEGY === 'realistic') {
@@ -75,7 +75,7 @@ const GAMES = {
     setup('unity-version', '2022.3.27f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'FluffCrusade/313 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'FluffCrusade/321 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2022.3.27f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
@@ -217,12 +217,12 @@ const GAMES = {
     setup('unity-version', '2021.3.39f1');
 
     if (origin === 'ios') {
-      setup('user-agent', 'Polysphere/159 CFNetwork/1498.700.2 Darwin/23.6.0');
+      setup('user-agent', 'Polysphere/161 CFNetwork/1498.700.2 Darwin/23.6.0');
     } else {
       setup('user-agent', 'UnityPlayer/2021.3.39f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
     }
 
-    await login({ clientId: id('uuid'), clientOrigin: origin, clientVersion: _`ios ? 1.15.31 : 1.15.301` });
+    await login({ clientId: id('uuid'), clientOrigin: origin, clientVersion: _`ios ? 1.15.32 : 1.15.301` });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 10_000 : 3_000);
@@ -265,14 +265,14 @@ const GAMES = {
       }
     }
 
-    await login({ clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
+    await login(1, { clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin });
 
     while (!instance.hasCode) {
       await delay(TIMING_STRATEGY === 'realistic' ? 60_000 : 20_000);
-      await event({ eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'spend-energy' });
+      await event(1, { eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'spend-energy' });
     }
 
-    await collect();
+    await collect(1);
   },
   CLONE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '74ee0b5b-775e-4bee-974f-63e7f4d5bacb');
