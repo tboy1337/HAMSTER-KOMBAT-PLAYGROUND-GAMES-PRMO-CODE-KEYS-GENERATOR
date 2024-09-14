@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.11.0
+ * @version 1.12.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -21,6 +21,27 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
+  HIDE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
+    setup('app-token', '4bf4966c-4d22-439b-8ff2-dc5ebca1a600');
+    setup('promo-id', '4bf4966c-4d22-439b-8ff2-dc5ebca1a600');
+    setup('unity-version', '2022.3.38f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'HideBall/1 CFNetwork/1498.700.2 Darwin/23.6.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.38f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id(_`ios ? UUID : h32`), clientOrigin: origin, clientVersion: '1.2.4' });
+    const eventId = id('uuid');
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 10_000);
+      await event(1, { eventId, eventOrigin: 'undefined', eventType: 'undefined' });
+    }
+
+    await collect(1);
+  },
   BOUNC: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'bc72d3b9-8e91-4884-9c33-f72482f0db37');
     setup('promo-id', 'bc72d3b9-8e91-4884-9c33-f72482f0db37');

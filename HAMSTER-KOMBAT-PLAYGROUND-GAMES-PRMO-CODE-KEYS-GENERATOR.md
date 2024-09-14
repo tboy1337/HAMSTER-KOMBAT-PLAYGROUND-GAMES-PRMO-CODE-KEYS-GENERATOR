@@ -120,6 +120,7 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+HIDE ~ 3m \
 BOUNC ~ 2m \
 STONE ~ 2m \
 FLUF ~ 2m \
@@ -139,6 +140,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+HIDE ~ 10m \
 BOUNC ~ 7m \
 STONE ~ 8m \
 FLUF ~ 8m \
@@ -175,6 +177,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.12.0
+
+1. Added HIDE game.
 
 ### 1.11.0
 
