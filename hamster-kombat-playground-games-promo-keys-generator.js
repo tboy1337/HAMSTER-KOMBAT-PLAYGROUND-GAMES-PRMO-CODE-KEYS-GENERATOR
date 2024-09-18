@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.12.0
+ * @version 1.13.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -21,6 +21,49 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
+  PIN: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', 'd2378baf-d617-417a-9d99-d685824335f0');
+    setup('promo-id', 'd2378baf-d617-417a-9d99-d685824335f0');
+    setup('unity-version', '2022.3.41f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'PinOutMaster/3 CFNetwork/1568.100.1 Darwin/24.0.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.41f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id(_`ios ? UUID : h32`), clientOrigin: origin, clientVersion: '1.2.6' });
+    const eventId = id('uuid');
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 40_000 : 20_000);
+      await event(1, { eventId, eventOrigin: 'undefined', eventType: 'undefined' });
+      await getClient(1);
+    }
+
+    await collect(1);
+  },
+  COUNT: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', '4bdc17da-2601-449b-948e-f8c7bd376553');
+    setup('promo-id', '4bdc17da-2601-449b-948e-f8c7bd376553');
+    setup('unity-version', '2022.3.30f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'CountMaster/445 CFNetwork/1568.100.1 Darwin/24.0.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.30f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id(_`ios ? ts-d7 : ts-d19`), clientOrigin: origin, clientVersion: _`ios ? 1.84.6 : 1.83.10` });
+    await getClient(1);
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 40_000 : 20_000);
+      await event(1, { eventId: 'StartLevel', eventOrigin: 'undefined' });
+    }
+
+    await collect(1);
+  },
   HIDE: async ({ _, collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', '4bf4966c-4d22-439b-8ff2-dc5ebca1a600');
     setup('promo-id', '4bf4966c-4d22-439b-8ff2-dc5ebca1a600');

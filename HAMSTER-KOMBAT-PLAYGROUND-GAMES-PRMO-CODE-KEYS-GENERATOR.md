@@ -45,7 +45,7 @@ node -e "$(curl -s https://gist.githubusercontent.com/delasy/96c5340fc5e0617ddc1
 With Arguments:
 
 ```shell
-node -e "..." -- --timing-strategy=fastest -k=1
+node -e "..." -- --timing-strategy=fastest --k=1
 ```
 
 ### With Node.js One-Liner (Windows)
@@ -97,7 +97,7 @@ node hamster-kombat-playground-games-promo-keys-generator.js
 
 `--keys`, `-k` - Number of keys to generate for each game. You can provide number of keys for specific games: `BIKE:1` - this will generate 1 key for `BIKE` game and 0 keys for all other games. You can add a fallback `4,BIKE:1` - this will generate 1 key for `BIKE` game and 4 keys for all other games. \
 &emsp;Default: `4,FLUF:8`. \
-&emsp;Example: `--keys=MERGE:3`, `--keys="4,BIKE:1,TRIM:2"`, `--keys=4`, `-k=1`.
+&emsp;Example: `--keys=MERGE:3`, `--keys="4,BIKE:1,TRIM:2"`, `--keys=4`, `--k=1`.
 
 ### only
 
@@ -120,6 +120,8 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+PIN ~ 2m \
+COUNT ~ 5m \
 HIDE ~ 3m \
 BOUNC ~ 2m \
 STONE ~ 2m \
@@ -140,6 +142,8 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+PIN ~ 4m \
+COUNT ~ 10m \
 HIDE ~ 10m \
 BOUNC ~ 7m \
 STONE ~ 8m \
@@ -177,6 +181,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.13.0
+
+1. Added PIN and COUNT games.
 
 ### 1.12.0
 
