@@ -120,6 +120,7 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+INFCT ~ 2m \
 PIN ~ 2m \
 COUNT ~ 5m \
 HIDE ~ 3m \
@@ -142,6 +143,7 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+INFCT ~ 9m \
 PIN ~ 4m \
 COUNT ~ 10m \
 HIDE ~ 10m \
@@ -181,6 +183,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.14.0
+
+1. Added INFCT game.
 
 ### 1.13.0
 
