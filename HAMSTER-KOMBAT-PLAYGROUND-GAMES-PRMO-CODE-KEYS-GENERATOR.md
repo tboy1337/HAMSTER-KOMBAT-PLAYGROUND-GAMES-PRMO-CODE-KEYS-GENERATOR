@@ -120,6 +120,8 @@ This is JS script that meant to be run with Node.js
 
 **Fastest Strategy**
 
+FCTRY ~ 3m \
+WATER ~ 3m \
 INFCT ~ 2m \
 PIN ~ 2m \
 COUNT ~ 5m \
@@ -143,6 +145,8 @@ BIKE ~ 5m
 
 **Realistic Strategy**
 
+FCTRY ~ 19m \
+WATER ~ 12m \
 INFCT ~ 9m \
 PIN ~ 4m \
 COUNT ~ 10m \
@@ -183,6 +187,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.15.0
+
+1. Added FCTRY and WATER games.
 
 ### 1.14.0
 

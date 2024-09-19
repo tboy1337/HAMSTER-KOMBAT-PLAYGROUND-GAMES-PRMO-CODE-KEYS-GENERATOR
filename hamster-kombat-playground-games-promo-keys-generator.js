@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.14.0
+ * @version 1.15.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -21,6 +21,58 @@ const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim
 //
 
 const GAMES = {
+  FCTRY: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', 'd02fc404-8985-4305-87d8-32bd4e66bb16');
+    setup('promo-id', 'd02fc404-8985-4305-87d8-32bd4e66bb16');
+    setup('unity-version', '2022.3.46f1');
+
+    if (origin === 'ios') {
+      setup('user-agent', 'FactoryWorld/75 CFNetwork/1568.100.1 Darwin/24.0.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.46f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id('uuid'), clientOrigin: origin, clientVersion: '1.43.18' });
+    await getClient(1);
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 150_000 : 20_000);
+      await event(1, { eventId: id('uuid'), eventOrigin: 'undefined', eventType: 'HamsterGathred' });
+    }
+
+    await collect(1);
+  },
+  WATER: async ({ _, collect, delay, event, getClient, id, instance, login, origin, setup }) => {
+    setup('app-token', 'daab8f83-8ea2-4ad0-8dd5-d33363129640');
+    setup('promo-id', 'daab8f83-8ea2-4ad0-8dd5-d33363129640');
+    setup('unity-version', _`ios ? 2022.3.25f1 : 2022.3.46f1`);
+
+    if (origin === 'ios') {
+      setup('user-agent', 'AmongWater/1 CFNetwork/1568.100.1 Darwin/24.0.0');
+    } else {
+      setup('user-agent', 'UnityPlayer/2022.3.46f1 (UnityWebRequest/1.0, libcurl/8.5.0-DEV)');
+    }
+
+    await login(1, { clientId: id(_`ios ? UUID : h32`), clientOrigin: origin, clientVersion: _`ios ? 1.0.37 : 1.0.40` });
+    await getClient(1);
+
+    if (TIMING_STRATEGY === 'realistic') {
+      await delay(180_000);
+    }
+
+    while (!instance.hasCode) {
+      await delay(TIMING_STRATEGY === 'realistic' ? 30_000 : 20_000);
+      await event(1, { eventId: id('uuid'), eventOrigin: 'undefined' });
+
+      if (TIMING_STRATEGY === 'realistic') {
+        await delay(60_000);
+      }
+
+      await getClient(1);
+    }
+
+    await collect(1);
+  },
   INFCT: async ({ collect, delay, event, id, instance, login, origin, setup }) => {
     setup('app-token', 'eb518c4b-e448-4065-9d33-06f3039f0fcb');
     setup('promo-id', 'eb518c4b-e448-4065-9d33-06f3039f0fcb');
