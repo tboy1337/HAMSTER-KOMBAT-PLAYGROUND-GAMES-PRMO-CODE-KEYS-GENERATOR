@@ -188,6 +188,10 @@ In advance, thanks a lot!
 
 ## Changelog
 
+### 1.15.1
+
+1. Changed default number of keys for FLUF game.
+
 ### 1.15.0
 
 1. Added FCTRY and WATER games.

@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.15.0
+ * @version 1.15.1
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);
@@ -13,7 +13,7 @@ const WITH_RANDOMIZED_DELAYS = true;
 const WITH_REINSTALL_TIME = true;
 const DEVICE = parseArg(['d', 'device'], (it) => (['android', 'ios'].includes(it) ? it : null));
 const EXCLUDE = parseArg(['e', 'exclude'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
-const KEYS = parseArg(['k', 'keys'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), ['4', 'FLUF:8']);
+const KEYS = parseArg(['k', 'keys'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), ['4']);
 const ONLY = parseArg(['o', 'only'], (it) => it.split(',').map((it2) => it2.trim()).filter((it2) => it2 !== ''), []);
 
 //
