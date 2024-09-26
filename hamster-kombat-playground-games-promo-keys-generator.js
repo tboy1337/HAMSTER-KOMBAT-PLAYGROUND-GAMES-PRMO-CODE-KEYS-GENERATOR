@@ -1,7 +1,7 @@
 /**
  * HamsterKombat Playground Games Promo Code Keys Generator
  * @author Aaron Delasy
- * @version 1.15.1
+ * @version 1.16.0
  */
 
 const DEBUG = parseArg(['debug'], (it) => (['true', 'false', ''].includes(it) ? it !== 'false' : null), false);

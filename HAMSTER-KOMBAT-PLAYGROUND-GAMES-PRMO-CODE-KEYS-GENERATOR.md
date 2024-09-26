@@ -1,4 +1,9 @@
 # HamsterKombat Playground Promo Code Keys Generator
+by [@delasy](https://github.com/delasy)
+
+> [!WARNING]
+> # THIS SCRIPT IS NO LONGER MAINTAINED.
+> # USE IT AT YOUR OWN RISK AFTER 2024-09-26.
 
 This script is way more advanced than other scripts out there.
 
@@ -187,6 +192,10 @@ If this gist helped you, consider helping me by giving a star to my main project
 In advance, thanks a lot!
 
 ## Changelog
+
+### 1.16.0
+
+1. Added maintenance warning.
 
 ### 1.15.1
 
